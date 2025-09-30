@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlatformName - Facts before opinions</title>
+    <style>
+        :root {
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #242424;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #4a9eff;
+            --accent-hover: #3a8eef;
+            --border: #333;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .search-section {
+            margin: 3rem 0;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .chip:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .chip.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .studies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .study-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .study-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        .study-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .study-summary {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .study-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .study-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+
+        .study-sources {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .source-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .method-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .method-list li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: var(--bg-card);
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+        }
+
+        .method-list li strong {
+            color: var(--accent);
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-item a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        footer .logo {
+            margin-bottom: 0.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .studies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">PlatformName</div>
+        <nav>
+            <a href="#studies">Studies</a>
+            <a href="#method">Method & Sources</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <button class="theme-toggle" id="themeToggle">Light Mode</button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Facts before opinions</h1>
+        <p>Providing neutral, data-driven analysis of public issues through rigorous research and transparent methodology</p>
+    </section>
+
+    <div class="container">
+        <section id="studies" class="search-section">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Search studies...">
+            <div class="filter-chips" id="filterChips">
+                <div class="chip active" data-filter="all">All</div>
+                <div class="chip" data-filter="health">Health</div>
+                <div class="chip" data-filter="economy">Economy</div>
+                <div class="chip" data-filter="environment">Environment</div>
+                <div class="chip" data-filter="education">Education</div>
+                <div class="chip" data-filter="technology">Technology</div>
+            </div>
+        </section>
+
+        <div class="studies-grid" id="studiesGrid"></div>
+
+        <section id="method" class="section">
+            <h2>Method & Sources</h2>
+            <p>Our approach is built on three core principles that ensure the quality and reliability of our analysis:</p>
+            <ul class="method-list">
+                <li>
+                    <strong>Critical Use of Sources:</strong> We evaluate each source for credibility, bias, and methodological rigor. Only peer-reviewed research, official statistics, and verified data are included in our studies.
+                </li>
+                <li>
+                    <strong>Transparency:</strong> Every claim is backed by clearly cited sources. Our methodology is open and documented, allowing anyone to verify our findings and understand our analytical process.
+                </li>
+                <li>
+                    <strong>Reproducibility:</strong> We provide all necessary information for others to reproduce our analysis. Data sources, statistical methods, and analytical frameworks are fully documented.
+                </li>
+            </ul>
+        </section>
+
+        <section id="about" class="section">
+            <h2>About</h2>
+            <p>
+                PlatformName is dedicated to cutting through noise and misinformation by providing clear, evidence-based analysis of important public issues. We believe that informed public discourse requires access to reliable, neutral information presented in an accessible format.
+            </p>
+            <p>
+                Our team of researchers and analysts works to distill complex studies and data into understandable insights, always maintaining rigorous standards of accuracy and objectivity. We don't tell you what to think—we provide you with the facts you need to form your own informed opinions.
+            </p>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Contact</h2>
+            <p>Get in touch with us for questions, suggestions, or collaboration opportunities.</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>Email:</span>
+                    <a href="mailto:contact@platformname.com">contact@platformname.com</a>
+                </div>
+                <div class="contact-item">
+                    <span>Instagram:</span>
+                    <a href="https://instagram.com/platformname" target="_blank">@platformname</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="logo">PlatformName</div>
+        <p>Facts before opinions</p>
+    </footer>
+
+    <script>
+        const studiesData = [
+            {
+                id: 1,
+                title: "Impact of Remote Work on Productivity",
+                summary: "A comprehensive analysis of productivity metrics across industries shows mixed results for remote work implementation, with significant variation based on job type and organizational support.",
+                date: "2025-09-15",
+                tags: ["economy", "technology"],
+                sources: [
+                    { name: "Study", url: "#" },
+                    { name: "Data", url: "#" }
+                ]
+            },
+            {
+                id: 2,
+                title: "Urban Green Spaces and Public Health",
+                summary: "Research demonstrates a significant correlation between access to urban green spaces and improved mental health outcomes, particularly in high-density residential areas.",
+                date: "2025-09-10",
+                tags: ["health", "environment"],
+                sources: [
+                    { name: "Research Paper", url: "#" },
+                    { name: "Dataset", url: "#" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Digital Learning Effectiveness in K-12",
+                summary: "Meta-analysis of educational outcomes reveals that blended learning approaches outperform purely digital or traditional methods when implemented with proper teacher training and support.",
+                date: "2025-09-05",
+                tags: ["education", "technology"],
+                sources: [
+                    { name: "Meta-Analysis", url: "#" },
+                    { name: "Source Data", url: "#" }
+                ]
+            },
+            {
+                id: 4,
+                title: "Renewable Energy Cost Trends",
+                summary: "Analysis of global energy markets shows renewable energy costs have decreased by 40% over five years, making solar and wind competitive with fossil fuels in most markets.",
+                date: "2025-08-28",
+                tags: ["environment", "economy"],
+                sources: [
+                    { name: "Report", url: "#" },
+                    { name: "Statistics", url: "#" }
+                ]
+            },
+            {
+                id: 5,
+                title: "Vaccination Rates and Community Immunity",
+                summary: "Epidemiological data confirms that community immunity thresholds vary by disease, with current vaccination rates meeting requirements for most but not all preventable diseases.",
+                date: "2025-08-20",
+                tags: ["health"],
+                sources: [
+                    { name: "CDC Data", url: "#" },
+                    { name: "Study", url: "#" }
+                ]
+            },
+            {
+                id: 6,
+                title: "AI Impact on Employment Patterns",
+                summary: "Labor market analysis indicates AI adoption is reshaping job categories rather than eliminating employment overall, with growth in complementary roles offsetting losses in routine tasks.",
+                date: "2025-08-15",
+                tags: ["technology", "economy"],
+                sources: [
+                    { name: "Labor Statistics", url: "#" },
+                    { name: "Analysis", url: "#" }
+                ]
+            }
+        ];
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function renderStudies() {
+            const grid = document.getElementById('studiesGrid');
+            const filteredStudies = studiesData.filter(study => {
+                const matchesFilter = currentFilter === 'all' || study.tags.includes(currentFilter);
+                const matchesSearch = study.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                     study.summary.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filteredStudies.length === 0) {
+                grid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">No studies found matching your criteria.</p>';
+                return;
+            }
+
+            grid.innerHTML = filteredStudies.map(study => `
+                <div class="study-card">
+                    <h3>${study.title}</h3>
+                    <p class="study-summary">${study.summary}</p>
+                    <div class="study-meta">
+                        <span>${study.date}</span>
+                    </div>
+                    <div class="study-tags">
+                        ${study.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="study-sources">
+                        ${study.sources.map(source => `<a href="${source.url}" class="source-link">${source.name} →</a>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('searchBar').addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderStudies();
+        });
+
+        document.getElementById('filterChips').addEventListener('click', (e) => {
+            if (e.target.classList.contains('chip')) {
+                document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.filter;
+                renderStudies();
+            }
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            document.getElementById('themeToggle').textContent = newTheme === 'light' ? 'Dark Mode' : 'Light Mode';
+        });
+
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        renderStudies();
+    </script>
+</body>
+</html>
