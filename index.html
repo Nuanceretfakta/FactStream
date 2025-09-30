@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlatformName - Facts before opinions</title>
+    <title>PlatformNavn - Fakta før holdninger</title>
     <style>
+        /* CSS Variables for theming */
         :root {
             --bg-primary: #0f0f0f;
             --bg-secondary: #1a1a1a;
@@ -108,8 +109,29 @@
         .hero p {
             font-size: 1.25rem;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* CTA Button styling */
+        .hero-cta {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-cta:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
         }
 
         .container {
@@ -166,14 +188,16 @@
             border-color: var(--accent);
         }
 
-        .studies-grid {
+        /* Renamed from studies-grid to cases-grid */
+        .cases-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             gap: 2rem;
             margin: 3rem 0;
         }
 
-        .study-card {
+        /* Updated card styling for new structure */
+        .case-card {
             background-color: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -181,36 +205,97 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .study-card:hover {
+        .case-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 16px var(--shadow);
         }
 
-        .study-card h3 {
+        .case-card h3 {
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
         }
 
-        .study-summary {
+        .case-intro {
             color: var(--text-secondary);
             margin-bottom: 1rem;
             font-size: 0.95rem;
+            line-height: 1.5;
         }
 
-        .study-meta {
+        .case-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
 
-        .study-tags {
+        /* Source badges */
+        .case-sources {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
             margin-bottom: 1rem;
+        }
+
+        .source-badge {
+            background-color: var(--bg-secondary);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .source-badge:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Consequences, Causes, Solutions sections */
+        .case-section {
+            margin-bottom: 1rem;
+        }
+
+        .case-section h4 {
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .case-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .case-section li {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding-left: 1.25rem;
+            margin-bottom: 0.35rem;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .case-section li:before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .case-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
         }
 
         .tag {
@@ -219,21 +304,6 @@
             padding: 0.25rem 0.75rem;
             border-radius: 12px;
             font-size: 0.85rem;
-        }
-
-        .study-sources {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .source-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .source-link:hover {
-            text-decoration: underline;
         }
 
         .section {
@@ -275,6 +345,7 @@
             display: flex;
             gap: 2rem;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .contact-item {
@@ -291,6 +362,17 @@
 
         .contact-item a:hover {
             text-decoration: underline;
+        }
+
+        /* Privacy note styling */
+        .privacy-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
         footer {
@@ -323,7 +405,7 @@
                 font-size: 2.5rem;
             }
 
-            .studies-grid {
+            .cases-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -336,209 +418,303 @@
 </head>
 <body>
     <header>
-        <div class="logo">PlatformName</div>
+        <div class="logo">PlatformNavn</div>
         <nav>
-            <a href="#studies">Studies</a>
-            <a href="#method">Method & Sources</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-            <button class="theme-toggle" id="themeToggle">Light Mode</button>
+            <a href="#problemstillinger">Problemstillinger</a>
+            <a href="#metode">Metode & Kilder</a>
+            <a href="#om">Om</a>
+            <a href="#kontakt">Kontakt</a>
+            <button class="theme-toggle" id="themeToggle">Lys tilstand</button>
         </nav>
     </header>
 
     <section class="hero">
-        <h1>Facts before opinions</h1>
-        <p>Providing neutral, data-driven analysis of public issues through rigorous research and transparent methodology</p>
+        <h1>Fakta før holdninger</h1>
+        <p>Vi undersøger danske samfundsproblemer med åbne data – kort, nuanceret og med konkrete løsningsforslag</p>
+        <a href="#" class="hero-cta">Foreslå en problemstilling</a>
     </section>
 
     <div class="container">
-        <section id="studies" class="search-section">
-            <input type="text" class="search-bar" id="searchBar" placeholder="Search studies...">
+        <!-- Search and filter section -->
+        <section id="problemstillinger" class="search-section">
+            <input type="text" class="search-bar" id="searchBar" placeholder="Søg i problemstillinger...">
             <div class="filter-chips" id="filterChips">
-                <div class="chip active" data-filter="all">All</div>
-                <div class="chip" data-filter="health">Health</div>
-                <div class="chip" data-filter="economy">Economy</div>
-                <div class="chip" data-filter="environment">Environment</div>
-                <div class="chip" data-filter="education">Education</div>
-                <div class="chip" data-filter="technology">Technology</div>
+                <div class="chip active" data-filter="alle">Alle</div>
+                <div class="chip" data-filter="skole">Skole & Børn</div>
+                <div class="chip" data-filter="ældre">Ældre</div>
+                <div class="chip" data-filter="sundhed">Sundhed</div>
+                <div class="chip" data-filter="kommunaløkonomi">Kommunaløkonomi</div>
+                <div class="chip" data-filter="arbejdskraft">Arbejdskraft</div>
+                <div class="chip" data-filter="bolig">Bolig</div>
+                <div class="chip" data-filter="transport">Transport</div>
+                <div class="chip" data-filter="klima">Klima</div>
             </div>
         </section>
 
-        <div class="studies-grid" id="studiesGrid"></div>
+        <!-- Cases grid (renamed from studies) -->
+        <div class="cases-grid" id="casesGrid"></div>
 
-        <section id="method" class="section">
-            <h2>Method & Sources</h2>
-            <p>Our approach is built on three core principles that ensure the quality and reliability of our analysis:</p>
+        <!-- Method section -->
+        <section id="metode" class="section">
+            <h2>Metode & Kilder</h2>
+            <p>Vores tilgang bygger på kildekritik, transparens og reproducerbarhed. Vi arbejder uafhængigt og uden politisk dagsorden.</p>
             <ul class="method-list">
                 <li>
-                    <strong>Critical Use of Sources:</strong> We evaluate each source for credibility, bias, and methodological rigor. Only peer-reviewed research, official statistics, and verified data are included in our studies.
+                    <strong>Kildekritik:</strong> Vi anvender kun verificerbare data fra offentlige myndigheder, forskningsinstitutioner og anerkendte organisationer. Hver kilde vurderes for troværdighed, metode og potentielle bias.
                 </li>
                 <li>
-                    <strong>Transparency:</strong> Every claim is backed by clearly cited sources. Our methodology is open and documented, allowing anyone to verify our findings and understand our analytical process.
+                    <strong>Transparens:</strong> Alle påstande dokumenteres med tydelige kildehenvisninger. Vi skelner klart mellem data, analyse og vurdering. Vores metode er åben og tilgængelig for alle.
                 </li>
                 <li>
-                    <strong>Reproducibility:</strong> We provide all necessary information for others to reproduce our analysis. Data sources, statistical methods, and analytical frameworks are fully documented.
+                    <strong>Reproducerbarhed:</strong> Andre skal kunne efterprøve vores konklusioner. Vi dokumenterer datakilder, antagelser og analysemetoder. Hvor det er muligt, gør vi brug af aktindsigt og åbne data.
+                </li>
+                <li>
+                    <strong>Løsninger som vurdering:</strong> Løsningsforslag er vores vurdering baseret på data og evidens. Vi præsenterer flere perspektiver og konsekvenser, men tager ikke politisk stilling.
                 </li>
             </ul>
         </section>
 
-        <section id="about" class="section">
-            <h2>About</h2>
+        <!-- About section -->
+        <section id="om" class="section">
+            <h2>Om</h2>
             <p>
-                PlatformName is dedicated to cutting through noise and misinformation by providing clear, evidence-based analysis of important public issues. We believe that informed public discourse requires access to reliable, neutral information presented in an accessible format.
+                PlatformNavn er en uafhængig platform, der gør offentlige data tilgængelige og forståelige. Vi analyserer danske samfundsproblemer gennem datadrevet research og præsenterer både konsekvenser, årsager og mulige løsninger.
             </p>
             <p>
-                Our team of researchers and analysts works to distill complex studies and data into understandable insights, always maintaining rigorous standards of accuracy and objectivity. We don't tell you what to think—we provide you with the facts you need to form your own informed opinions.
+                Platformen er gratis og åben for alle. Vi prioriterer cases baseret på datatilgængelighed og borgernær relevans. Alle kan foreslå nye problemstillinger, som vi vurderer efter vores kapacitet og tilgængelige data.
+            </p>
+            <p>
+                Vi har ingen politisk tilhørsforhold og modtager ikke finansiering fra interesseorganisationer. Vores formål er at fremme oplyst debat ved at gøre fakta lettere tilgængelige.
             </p>
         </section>
 
-        <section id="contact" class="section">
-            <h2>Contact</h2>
-            <p>Get in touch with us for questions, suggestions, or collaboration opportunities.</p>
+        <!-- Contact section -->
+        <section id="kontakt" class="section">
+            <h2>Kontakt</h2>
+            <p>Har du spørgsmål, forslag til problemstillinger eller vil du samarbejde? Kontakt os gerne.</p>
             <div class="contact-info">
                 <div class="contact-item">
                     <span>Email:</span>
-                    <a href="mailto:contact@platformname.com">contact@platformname.com</a>
+                    <a href="mailto:kontakt@eksempel.dk">kontakt@eksempel.dk</a>
                 </div>
                 <div class="contact-item">
                     <span>Instagram:</span>
-                    <a href="https://instagram.com/platformname" target="_blank">@platformname</a>
+                    <a href="#" target="_blank">Instagram</a>
                 </div>
+            </div>
+            <div class="privacy-note">
+                <strong>Privatliv:</strong> Vi bruger ingen cookies eller tracking som standard. Denne side samler ikke data om besøgende.
             </div>
         </section>
     </div>
 
     <footer>
-        <div class="logo">PlatformName</div>
-        <p>Facts before opinions</p>
+        <div class="logo">PlatformNavn</div>
+        <p>Fakta før holdninger</p>
     </footer>
 
     <script>
-        const studiesData = [
+        // Danish case data with new structure: consequences, causes, solutions
+        const casesData = [
             {
                 id: 1,
-                title: "Impact of Remote Work on Productivity",
-                summary: "A comprehensive analysis of productivity metrics across industries shows mixed results for remote work implementation, with significant variation based on job type and organizational support.",
-                date: "2025-09-15",
-                tags: ["economy", "technology"],
+                title: "Pædagogmangel i danske børnehaver",
+                intro: "Manglen på uddannede pædagoger påvirker kvaliteten i børnehaver og betyder øget arbejdspres for eksisterende personale. Dette har direkte konsekvenser for børns trivsel og læring i de tidlige år.",
+                date: "2025-09-20",
+                tags: ["skole"],
                 sources: [
-                    { name: "Study", url: "#" },
-                    { name: "Data", url: "#" }
+                    { name: "BUPL - Personalenormeringer 2024", url: "#" },
+                    { name: "KL - Rekrutteringsrapport", url: "#" },
+                    { name: "VIVE - Daginstitutionsanalyse", url: "#" }
+                ],
+                consequences: [
+                    "Færre uddannede pædagoger pr. barn end anbefalet i normeringer",
+                    "Øget brug af ufaglærte vikarer og midlertidige ansættelser",
+                    "Højere sygefravær blandt fastansatte på grund af øget arbejdspres"
+                ],
+                causes: [
+                    "Lavere søgning til pædagoguddannelsen end behov",
+                    "Mange nyuddannede forlader faget inden for få år",
+                    "Høje krav og relativt lavere løn end sammenlignelige uddannelser"
+                ],
+                solutions: [
+                    "Øge optaget til pædagoguddannelsen og styrke SU for studerende",
+                    "Forbedre arbejdsvilkår og karriereveje for at fastholde personale",
+                    "Målrettede lønstigninger for at øge fagets attraktivitet",
+                    "Bedre praktikpladser og mentorstøtte til nyuddannede"
                 ]
             },
             {
                 id: 2,
-                title: "Urban Green Spaces and Public Health",
-                summary: "Research demonstrates a significant correlation between access to urban green spaces and improved mental health outcomes, particularly in high-density residential areas.",
-                date: "2025-09-10",
-                tags: ["health", "environment"],
+                title: "Kommunal serviceramme og underforbrug på ældrepleje",
+                intro: "Mange kommuner bruger færre penge på ældrepleje end den vedtagne serviceramme tillader. Dette sker samtidig med, at ventetider og klager stiger, hvilket rejser spørgsmål om økonomistyring versus borgernes behov.",
+                date: "2025-09-15",
+                tags: ["ældre", "kommunaløkonomi"],
                 sources: [
-                    { name: "Research Paper", url: "#" },
-                    { name: "Dataset", url: "#" }
+                    { name: "KL - Økonomisk Redegørelse 2024", url: "#" },
+                    { name: "Ældre Sagen - Ventetidsrapport", url: "#" },
+                    { name: "Social- og Ældreministeriet - Nøgletal", url: "#" }
+                ],
+                consequences: [
+                    "Borgere venter længere på visiterede ydelser som hjemmepleje",
+                    "Kommuner overholder servicelovens krav, men ikke altid borgerens faktiske behov",
+                    "Pårørende må i stigende grad træde til med uformel hjælp"
+                ],
+                causes: [
+                    "Politisk prioritering af besparelser på trods af serviceramme",
+                    "Mangel på kvalificeret personale gør det svært at bruge budgettet",
+                    "Komplekse visitationsregler begrænser adgang til hjælp"
+                ],
+                solutions: [
+                    "Øget gennemsigtighed i kommunernes budgetlægning og forbrug",
+                    "Forenkling af visitationsprocessen for at reducere administrativt spild",
+                    "Rekrutteringsløft til SOSU-området for at kunne levere tildelte ydelser",
+                    "Bedre sammenhæng mellem serviceramme, politiske prioriteringer og faktisk forbrug"
                 ]
             },
             {
                 id: 3,
-                title: "Digital Learning Effectiveness in K-12",
-                summary: "Meta-analysis of educational outcomes reveals that blended learning approaches outperform purely digital or traditional methods when implemented with proper teacher training and support.",
-                date: "2025-09-05",
-                tags: ["education", "technology"],
+                title: "Ventetider i børne- og ungdomspsykiatrien",
+                intro: "Mange børn og unge venter længe på psykiatrisk behandling, selvom problemerne er diagnosticeret. De lange ventetider kan forværre symptomer og skabe langvarige konsekvenser for unge menneskers liv.",
+                date: "2025-09-10",
+                tags: ["sundhed", "skole"],
                 sources: [
-                    { name: "Meta-Analysis", url: "#" },
-                    { name: "Source Data", url: "#" }
+                    { name: "Sundhedsstyrelsen - Ventetidsdata", url: "#" },
+                    { name: "Region H - BUP-statistik", url: "#" },
+                    { name: "Børns Vilkår - Årsrapport", url: "#" }
+                ],
+                consequences: [
+                    "Børn og unge med angst, depression eller ADHD venter måneder på behandling",
+                    "Forældrene oplever magtesløshed og manglende støtte",
+                    "Skolefravær og sociale problemer forværres under ventetiden"
+                ],
+                causes: [
+                    "For få børne- og ungdomspsykiatere og psykologer i forhold til behov",
+                    "Stigende antal henvendelser især efter COVID-19",
+                    "Langvarig uddannelsestid og manglende kapacitet på universiteterne"
+                ],
+                solutions: [
+                    "Øge kapaciteten på psykiatriuddannelser og speciallægeuddannelsen",
+                    "Styrke tidlige indsatser via PPR og skoler for at forebygge",
+                    "Flere digitale behandlingstilbud som supplement til fysiske konsultationer",
+                    "Økonomiske incitamenter for psykologer til at arbejde i offentligt regi"
                 ]
             },
             {
                 id: 4,
-                title: "Renewable Energy Cost Trends",
-                summary: "Analysis of global energy markets shows renewable energy costs have decreased by 40% over five years, making solar and wind competitive with fossil fuels in most markets.",
-                date: "2025-08-28",
-                tags: ["environment", "economy"],
+                title: "Mangel på SOSU'er i hjemmeplejen",
+                intro: "Kommunerne kæmper med at rekruttere og fastholde social- og sundhedshjælpere til ældreplejen. Dette betyder øget pres på eksisterende personale og risiko for at ældre borgere ikke får den pleje, de har brug for.",
+                date: "2025-09-05",
+                tags: ["ældre", "arbejdskraft"],
                 sources: [
-                    { name: "Report", url: "#" },
-                    { name: "Statistics", url: "#" }
-                ]
-            },
-            {
-                id: 5,
-                title: "Vaccination Rates and Community Immunity",
-                summary: "Epidemiological data confirms that community immunity thresholds vary by disease, with current vaccination rates meeting requirements for most but not all preventable diseases.",
-                date: "2025-08-20",
-                tags: ["health"],
-                sources: [
-                    { name: "CDC Data", url: "#" },
-                    { name: "Study", url: "#" }
-                ]
-            },
-            {
-                id: 6,
-                title: "AI Impact on Employment Patterns",
-                summary: "Labor market analysis indicates AI adoption is reshaping job categories rather than eliminating employment overall, with growth in complementary roles offsetting losses in routine tasks.",
-                date: "2025-08-15",
-                tags: ["technology", "economy"],
-                sources: [
-                    { name: "Labor Statistics", url: "#" },
-                    { name: "Analysis", url: "#" }
+                    { name: "FOA - Arbejdskraftanalyse", url: "#" },
+                    { name: "KL - Rekrutteringsudfordringer", url: "#" },
+                    { name: "Styrelsen for Patientsikkerhed - Tilsyn", url: "#" }
+                ],
+                consequences: [
+                    "Kommuner må anvende dyrere vikarbureauer for at dække vagter",
+                    "Faste medarbejdere arbejder overtime med risiko for udbrændthed",
+                    "Kontinuiteten for ældre borgere lider under skiftende ansigter"
+                ],
+                causes: [
+                    "Fysisk hårdt arbejde med relativt lav løn sammenlignet med andre områder",
+                    "Høj andel af deltidsansættelser gør det svært at leve af lønnen",
+                    "Manglende anerkendelse og karrieremuligheder i faget"
+                ],
+                solutions: [
+                    "Hæve lønnen og forbedre ansættelsesvilkår for at gøre faget mere attraktivt",
+                    "Tilbyde flere fuldtidsstillinger med fast vagtplan",
+                    "Videreuddannelsesmuligheder og karriereveje inden for social- og sundhedsområdet",
+                    "Målrettede kampagner og praktikpladser for at tiltrække unge"
                 ]
             }
         ];
 
-        let currentFilter = 'all';
+        let currentFilter = 'alle';
         let searchTerm = '';
 
-        function renderStudies() {
-            const grid = document.getElementById('studiesGrid');
-            const filteredStudies = studiesData.filter(study => {
-                const matchesFilter = currentFilter === 'all' || study.tags.includes(currentFilter);
-                const matchesSearch = study.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                     study.summary.toLowerCase().includes(searchTerm.toLowerCase());
+        // Render cases with new structure
+        function renderCases() {
+            const grid = document.getElementById('casesGrid');
+            const filteredCases = casesData.filter(caseItem => {
+                const matchesFilter = currentFilter === 'alle' || caseItem.tags.includes(currentFilter);
+                const searchLower = searchTerm.toLowerCase();
+                const matchesSearch = 
+                    caseItem.title.toLowerCase().includes(searchLower) || 
+                    caseItem.intro.toLowerCase().includes(searchLower) ||
+                    caseItem.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
+                    caseItem.sources.some(source => source.name.toLowerCase().includes(searchLower));
                 return matchesFilter && matchesSearch;
             });
 
-            if (filteredStudies.length === 0) {
-                grid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">No studies found matching your criteria.</p>';
+            if (filteredCases.length === 0) {
+                grid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">Ingen problemstillinger matcher dine søgekriterier.</p>';
                 return;
             }
 
-            grid.innerHTML = filteredStudies.map(study => `
-                <div class="study-card">
-                    <h3>${study.title}</h3>
-                    <p class="study-summary">${study.summary}</p>
-                    <div class="study-meta">
-                        <span>${study.date}</span>
+            grid.innerHTML = filteredCases.map(caseItem => `
+                <div class="case-card">
+                    <h3>${caseItem.title}</h3>
+                    <p class="case-intro">${caseItem.intro}</p>
+                    <div class="case-meta">
+                        <span>Sidst opdateret: ${caseItem.date}</span>
                     </div>
-                    <div class="study-tags">
-                        ${study.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    <div class="case-sources">
+                        ${caseItem.sources.map(source => 
+                            `<a href="${source.url}" class="source-badge">${source.name}</a>`
+                        ).join('')}
                     </div>
-                    <div class="study-sources">
-                        ${study.sources.map(source => `<a href="${source.url}" class="source-link">${source.name} →</a>`).join('')}
+                    <div class="case-section">
+                        <h4>Konsekvenser</h4>
+                        <ul>
+                            ${caseItem.consequences.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="case-section">
+                        <h4>Mulige årsager</h4>
+                        <ul>
+                            ${caseItem.causes.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="case-section">
+                        <h4>Løsningsforslag</h4>
+                        <ul>
+                            ${caseItem.solutions.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="case-tags">
+                        ${caseItem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
                 </div>
             `).join('');
         }
 
+        // Search functionality
         document.getElementById('searchBar').addEventListener('input', (e) => {
             searchTerm = e.target.value;
-            renderStudies();
+            renderCases();
         });
 
+        // Filter chips functionality
         document.getElementById('filterChips').addEventListener('click', (e) => {
             if (e.target.classList.contains('chip')) {
                 document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
                 e.target.classList.add('active');
                 currentFilter = e.target.dataset.filter;
-                renderStudies();
+                renderCases();
             }
         });
 
+        // Theme toggle functionality
         document.getElementById('themeToggle').addEventListener('click', () => {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             html.setAttribute('data-theme', newTheme);
-            document.getElementById('themeToggle').textContent = newTheme === 'light' ? 'Dark Mode' : 'Light Mode';
+            document.getElementById('themeToggle').textContent = newTheme === 'light' ? 'Mørk tilstand' : 'Lys tilstand';
         });
 
+        // Smooth scroll for navigation
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -550,7 +726,8 @@
             });
         });
 
-        renderStudies();
+        // Initial render
+        renderCases();
     </script>
 </body>
 </html>

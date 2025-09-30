@@ -1,0 +1,78 @@
+Transform the current single-file static site into a Danish, public, data-driven portal focused on problems and solutions (not generic “studies”). Keep everything in ONE index.html with inline CSS/JS – no React/Node/backends. Make these changes:
+
+Brand & Hero
+
+Site name: PlatformNavn (placeholder).
+
+Header nav (Danish): Problemstillinger, Metode & Kilder, Om, Kontakt.
+
+Hero title: Fakta før holdninger.
+
+Hero subtitle: Vi undersøger danske samfundsproblemer med åbne data – kort, nuanceret og med konkrete løsningsforslag.
+
+Add a primary CTA button: Foreslå en problemstilling (opens a placeholder link # we can later change to a Google Form).
+
+Emner/filtre (chips)
+Replace topics with: Alle, Skole & Børn, Ældre, Sundhed, Kommunaløkonomi, Arbejdskraft, Bolig, Transport, Klima.
+
+Kort/indhold: from “studies” to “cases”
+Rename the grid section to Problemstillinger.
+Each card must show this structure:
+
+Titel (kort og skarpt)
+
+Kort intro (2–3 linjer om hvorfor det betyder noget for borgerne)
+
+Sidst opdateret (dato)
+
+Data-kilder (navn + link badges)
+
+Konsekvenser (1–3 bullets)
+
+Mulige årsager (1–3 bullets)
+
+Løsningsforslag (2–4 bullets, konkrete, handlingsorienterede)
+
+Emne-tags (chips)
+
+Keep search and topic filtering working on title/intro/tags/sources.
+
+Create 3–4 example cards in Danish (placeholders) aligned to Danish context:
+
+Pædagogmangel / Skole & Børn
+
+Serviceramme og kommunal underforbrug / Kommunaløkonomi
+
+Ventetider for børne- og ungepsykiatri / Sundhed
+
+Mangel på SOSU’er i hjemmeplejen / Ældre
+
+Give each card realistic placeholder source names (e.g., “KL – Økonomisk Redegørelse”, “VIVE”, “Region H – Ventetider”) with # links.
+
+Metode & Kilder section
+Short Danish text about kildekritik, reproducerbarhed, antagelser, aktindsigt/FOI, og hvordan vi skelner mellem data, analyse, vurdering (løsninger). No political agenda.
+
+Om section
+Danish description: uafhængig, gratis, åben for forslag fra offentligheden; cases prioriteres ift. datatilgængelighed og borgernær relevans.
+
+Kontakt
+Show placeholders:
+
+Email: kontakt@eksempel.dk
+
+Instagram link text: Instagram
+
+Add small note: “Ingen cookies/tracking som standard.”
+
+UI
+
+Keep dark mode default and theme toggle.
+
+Keep sticky header and responsive layout.
+
+Keep search box and smooth scrolling.
+
+Keep everything in one index.html file; keep code clean and commented where changed.
+
+Return the full updated index.html content inline.
+Do not introduce any build tools or external libs.
