@@ -3,19 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlatformNavn - Fakta før holdninger</title>
+    <title> NuanceretFakta - Fakta før holdninger </title>
     <style>
         /* CSS Variables for theming */
         :root {
-            --bg-primary: #0f0f0f;
-            --bg-secondary: #1a1a1a;
-            --bg-card: #242424;
-            --text-primary: #e0e0e0;
-            --text-secondary: #a0a0a0;
-            --accent: #4a9eff;
-            --accent-hover: #3a8eef;
-            --border: #333;
-            --shadow: rgba(0, 0, 0, 0.3);
+          --bg-primary: #0f0f0f;
+          --bg-secondary: #1a1a1a;
+          --bg-card: #242424;
+          --text-primary: #e0e0e0;
+          --text-secondary: #a0a0a0;
+
+          /* Nye accentfarver */
+          --accent: #17b3a6;
+          --accent-hover: #129e92;
+
+          --border: #333;
+          --shadow: rgba(0, 0, 0, 0.3);
+        }
+        /* -- Ryd lilla outline + sæt diskret kant -- */
+        .section {
+          outline: none !important;              /* fjern evt. debug-outline */
+          border: 1px solid var(--border);       /* mørk/grå kant */
+        }
+
+        /* hvis en eller anden global fokus-outline gav lilla, neutralisér den i sektioner */
+        .section *:focus {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+
+        /* Ens grå brødtekst inde i bokse */
+        .section p,
+        .section li {
+          color: var(--text-secondary);
+        }
+
+        /* Overskrifter i bokse forbliver lyse/hvide (eller brug primær, hvis du vil) */
+        .section h3,
+        .section h4,
+        .section strong {
+          color: var(--text-primary);
+        }
+
+        /* Links: ikke blå. Brug brand-farven (turkis) – eller skift til grå hvis du hellere vil */
+        .section a {
+          color: var(--accent);                  /* turkis i stedet for blå */
+          text-decoration: none;
+        }
+        .section a:hover {
+          color: var(--accent-hover);
+          text-decoration: underline;
+        }
+
+        /* Kontakt-sektion: samme link-stil, så alt matcher */
+        .contact a {
+          color: var(--accent);
+        }
+        .contact a:hover {
+          color: var(--accent-hover);
+          text-decoration: underline;
+        }
+
         }
 
         [data-theme="light"] {
@@ -94,24 +142,79 @@
             color: white;
         }
 
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        /* --- HERO: force center --- */
+        .hero{
+          width:100%;
+          display:flex;
+          flex-direction:column;
+          align-items:center;      /* vandret centrering */
+          justify-content:center;  /* lodret hvis der er højde */
+          text-align:center !important;
+          gap:1rem;
+          padding:4rem 1rem 3rem;
+          margin:0 auto;
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent);
+        .hero h1{ 
+          margin:0 !important;
+          line-height:1.1;
+          letter-spacing:-0.02em;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 2rem;
+        .hero .brand-hero{
+          display:block;
+          font-size:1.05rem;
+          font-weight:700;
+          color:var(--text-secondary);
+          margin-bottom:.25rem;
         }
+
+        .hero .payoff{
+          display:block;
+          font-size:3.2rem;
+          font-weight:800;
+          color:var(--text-primary);
+        }
+
+        .hero p{
+          max-width:680px;
+          margin:0 auto 1.2rem !important;
+          font-size:1.1rem;
+          color:var(--text-secondary);
+        }
+
+        .hero-cta{
+          display:inline-block;
+          padding:.9rem 1.2rem;
+          font-weight:700;
+          border-radius:10px;
+        }
+
+        @media (max-width:640px){
+          .hero .payoff{ font-size:2.2rem; }
+          .hero p{ font-size:1rem; }
+        
+            /* eksisterende css til siden */
+
+            /* --- Kontakt sektion --- */
+            .contact a {
+              display:inline-block;
+              margin:.35rem 0;
+              color:var(--accent);
+              text-decoration:none;
+              font-weight:600;
+            }
+
+            .contact a:hover { 
+              text-decoration:underline;
+              color:var(--accent-hover);
+            }
+
+            .contact p { 
+              margin-top:.6rem;
+              color:var(--text-secondary);
+              font-size:.95rem;
+            }
 
         /* CTA Button styling */
         .hero-cta {
@@ -305,23 +408,31 @@
             border-radius: 12px;
             font-size: 0.85rem;
         }
+            /* --- Sektioner: centreret kort/boks --- */
+            .section{
+              max-width: 900px;
+              margin: 2rem auto;
+              padding: 1.25rem 1rem;
+              background: var(--bg-card);
+              border: 1px solid var(--border);
+              border-radius: 12px;
+            }
 
-        .section {
-            padding: 4rem 0;
-            border-top: 1px solid var(--border);
-        }
+            /* typografi inde i sektioner */
+            .section h2{
+              font-size: 2.5rem;
+              margin-bottom: 1.5rem;
+              color: var(--accent);
+            }
+            .section p{
+              color: var(--text-secondary);
+              font-size: 1.1rem;
+              line-height: 1.8;
+              margin-bottom: 1rem;
+            }
 
-        .section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent);
-        }
+            }
 
-        .section p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 1rem;
         }
 
         .method-list {
@@ -413,321 +524,211 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+            header {
+              flex-direction: column;
+              gap: 1rem;
+            }
+
+            /* --- dine nye sektion-styles starter her --- */
+ 
+            .footer { 
+              max-width: 900px; 
+              margin: 3rem auto 2rem; 
+              color: var(--text-secondary); 
+              text-align: center; 
+            }
+           
+            <style>
+            /* en masse eksisterende css her... */
+
+            header {
+              flex-direction: column;
+              gap: 1rem;
+            }
+
+            /* --- HERO OVERRIDE --- */
+           
+            }
+            
+            /* ====== HARD RESET FOR HERO + KNAP + SEKTIONER ====== */
+
+            /* Hero layout – centrer ALT */
+        .hero{
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;      /* vandret centrer */
+          justify-content: center;  /* lodret hvis der er højde */
+          text-align: center;
+          gap: 1rem;
+          padding: 4rem 1rem 3rem;
+          margin: 0 auto;
         }
+        .hero h1{ margin: 0; }
+        .hero p{ max-width: 680px; margin: 0 auto 1.2rem; }
+
+
+            /* Sektioner: luft, ramme, pæn bredde (kan justeres) */
+            
+            }
+         
+        .hero-cta {
+          display: inline-block;
+          background-color: var(--accent);
+          color: white;
+          padding: .9rem 1.4rem;
+          border-radius: 10px;
+          font-weight: 700;
+          text-decoration: none;
+          transition: all 0.25s ease;
+          box-shadow: 0 4px 12px var(--shadow);
+        }
+        .hero-cta:hover {
+          background-color: var(--accent-hover);
+          transform: translateY(-2px);
+        }
+
+        /* === NØD-OVERRIDE: tving sektioner til centrerede bokse === */
+        #om, #udgivelser, #kontakt {
+          max-width: 900px !important;
+          margin: 3rem auto !important;
+          padding: 2rem !important;
+          background: var(--bg-card) !important;
+          border: 1px solid var(--border) !important;
+          border-radius: 12px !important;
+          text-align: center !important;
+          /* debug: skal kunne ses nu */
+        }
+        #om h2, #udgivelser h2, #kontakt h2 {
+          color: var(--accent) !important;
+          font-size: 2.2rem !important;
+          margin-bottom: 1rem !important;
+        }
+        #om p, #udgivelser p, #kontakt p {
+          color: var(--text-secondary) !important;
+          font-size: 1.05rem !important;
+          line-height: 1.7 !important;
+          margin-bottom: 1rem !important;
+        }
+
+        /* Knap i hero – tving udseende */
+        .hero-cta{
+          display:inline-block !important;
+          background-color: var(--accent) !important;
+          color:#fff !important;
+          padding:.9rem 1.4rem !important;
+          border-radius:10px !important;
+          font-weight:700 !important;
+          text-decoration:none !important;
+          box-shadow:0 4px 12px var(--shadow) !important;
+        }
+        .hero-cta:hover{ background-color: var(--accent-hover) !important; }
+
+
+        
+        
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">PlatformNavn</div>
-        <nav>
-            <a href="#problemstillinger">Problemstillinger</a>
-            <a href="#metode">Metode & Kilder</a>
-            <a href="#om">Om</a>
-            <a href="#kontakt">Kontakt</a>
-            <button class="theme-toggle" id="themeToggle">Lys tilstand</button>
-        </nav>
+      <div class="logo">NuanceretFakta</div>
+      <nav>
+        <a href="#om">Om os</a>
+        <a href="#udgivelser">Udgivelser</a>
+        <a href="#kontakt">Kontakt</a>
+        <button class="theme-toggle" id="themeToggle">Mørk tilstand</button>
+      </nav>
     </header>
 
     <section class="hero">
-        <h1>Fakta før holdninger</h1>
-        <p>Vi undersøger danske samfundsproblemer med åbne data – kort, nuanceret og med konkrete løsningsforslag</p>
-        <a href="#" class="hero-cta">Foreslå en problemstilling</a>
+      <span class="brand-hero">NuanceretFakta</span>
+      <h1>Fakta før holdninger</h1>
+      <p>Åbne data, klar analyse, konkrete løsninger. Alt gratis og gennemsigtigt.</p>
+        <a href="#kontakt" class="hero-cta">Foreslå en problemstilling</a>
+
     </section>
 
-    <div class="container">
-        <!-- Search and filter section -->
-        <section id="problemstillinger" class="search-section">
-            <input type="text" class="search-bar" id="searchBar" placeholder="Søg i problemstillinger...">
-            <div class="filter-chips" id="filterChips">
-                <div class="chip active" data-filter="alle">Alle</div>
-                <div class="chip" data-filter="skole">Skole & Børn</div>
-                <div class="chip" data-filter="ældre">Ældre</div>
-                <div class="chip" data-filter="sundhed">Sundhed</div>
-                <div class="chip" data-filter="kommunaløkonomi">Kommunaløkonomi</div>
-                <div class="chip" data-filter="arbejdskraft">Arbejdskraft</div>
-                <div class="chip" data-filter="bolig">Bolig</div>
-                <div class="chip" data-filter="transport">Transport</div>
-                <div class="chip" data-filter="klima">Klima</div>
-            </div>
+    </a>
+
+    <!-- Gør knappen aktiv ved at sætte dit link ind -->
+    <section id="om" class="section">
+    <h2>Om os</h2>
+      <p><strong>Hvem er vi:</strong> Vi er en uafhængig platform uden politisk tilknytning. Vi går ikke op i højre eller venstre, men tror på, at nuancerede og objektive analyser kan understøtte bedre løsninger og beslutninger.</p>
+
+      <p><strong>Hvad laver vi:</strong> Vi undersøger danske samfundsproblemstillinger med udgangspunkt i offentligt tilgængelige dokumenter og data. Vores mål er både at bidrage med konkrete løsningsforslag og at gøre komplekse problemer mere forståelige.</p>
+
+      <p><strong>Hvorfor laver vi det:</strong> Beslutninger, meninger, holdninger og debat bør bygge på nuancerede fakta. Vi giver borgere, medier og beslutningstagere mulighed for at se bag om spin, symbolpolitik, generaliseringer og enkeltsager.</p>
+    </section>
+
+
+    <!-- Udgivelser  – vores færdige cases -->
+    <section id="udgivelser" class="section">
+      <h2>Udgivelser</h2>
+
+      <article class="case">
+        <h3>Pædagogmangel: Ubemandede vagter presser kvaliteten</h3>
+        <p>Åbne data fra kommuner viser en markant stigning i ubesatte vagter på specialskoler siden 2021. Det rammer kontinuitet og elevtid.</p>
+
+        <h4>Konsekvenser</h4>
+        <ul>
+          <li>Mindre tid pr. elev og lavere stabilitet i tilbuddet</li>
+          <li>Flere nødløsninger og aflysninger</li>
+          <li>Højere personaleomsætning</li>
+        </ul>
+
+        <h4>Løsninger</h4>
+        <ul>
+          <li>Målrettet rekruttering med fastholdelsesincitamenter (tidsbegrænset tillæg)</li>
+          <li>Fælles fastvikar-pulje på tværs af skoler (central planlægning)</li>
+          <li>Vagtplansregler for minimumsbemanding + frikøb på spidsbelastede tidspunkter</li>
+          <li>Kort modul i konfliktnedtrapning/low-arousal for nyansatte</li>
+        </ul>
+
+        <h4>Kilder</h4>
+        <p>
+          <a href="https://www.kl.dk">KL – Økonomisk Redegørelse</a> · 
+          <a href="https://www.vive.dk">VIVE – Rekruttering</a> · 
+          <a href="https://www.noegletal.dk">Kommunale nøgletal</a>
+        </p>
+
+        <p class="updated">Sidst opdateret: 02-10-2025</p>
+      </article>
+    </section>
+    <!-- KONTAKT -->
+    <section id="kontakt" class="section">
+          <h2>Kontakt</h2>
+          <p><a href="mailto:kontakt@eksempel.dk">kontakt@eksempel.dk</a></p>
+          <p><a href="https://instagram.com/dinprofil" target="_blank">Instagram</a></p>
+          <p>Vi bruger ikke cookies til tracking. Punktum.</p>
         </section>
-
-        <!-- Cases grid (renamed from studies) -->
-        <div class="cases-grid" id="casesGrid"></div>
-
-        <!-- Method section -->
-        <section id="metode" class="section">
-            <h2>Metode & Kilder</h2>
-            <p>Vores tilgang bygger på kildekritik, transparens og reproducerbarhed. Vi arbejder uafhængigt og uden politisk dagsorden.</p>
-            <ul class="method-list">
-                <li>
-                    <strong>Kildekritik:</strong> Vi anvender kun verificerbare data fra offentlige myndigheder, forskningsinstitutioner og anerkendte organisationer. Hver kilde vurderes for troværdighed, metode og potentielle bias.
-                </li>
-                <li>
-                    <strong>Transparens:</strong> Alle påstande dokumenteres med tydelige kildehenvisninger. Vi skelner klart mellem data, analyse og vurdering. Vores metode er åben og tilgængelig for alle.
-                </li>
-                <li>
-                    <strong>Reproducerbarhed:</strong> Andre skal kunne efterprøve vores konklusioner. Vi dokumenterer datakilder, antagelser og analysemetoder. Hvor det er muligt, gør vi brug af aktindsigt og åbne data.
-                </li>
-                <li>
-                    <strong>Løsninger som vurdering:</strong> Løsningsforslag er vores vurdering baseret på data og evidens. Vi præsenterer flere perspektiver og konsekvenser, men tager ikke politisk stilling.
-                </li>
-            </ul>
-        </section>
-
-        <!-- About section -->
-        <section id="om" class="section">
-            <h2>Om</h2>
-            <p>
-                PlatformNavn er en uafhængig platform, der gør offentlige data tilgængelige og forståelige. Vi analyserer danske samfundsproblemer gennem datadrevet research og præsenterer både konsekvenser, årsager og mulige løsninger.
-            </p>
-            <p>
-                Platformen er gratis og åben for alle. Vi prioriterer cases baseret på datatilgængelighed og borgernær relevans. Alle kan foreslå nye problemstillinger, som vi vurderer efter vores kapacitet og tilgængelige data.
-            </p>
-            <p>
-                Vi har ingen politisk tilhørsforhold og modtager ikke finansiering fra interesseorganisationer. Vores formål er at fremme oplyst debat ved at gøre fakta lettere tilgængelige.
-            </p>
-        </section>
-
-        <!-- Contact section -->
-        <section id="kontakt" class="section">
-            <h2>Kontakt</h2>
-            <p>Har du spørgsmål, forslag til problemstillinger eller vil du samarbejde? Kontakt os gerne.</p>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span>Email:</span>
-                    <a href="mailto:kontakt@eksempel.dk">kontakt@eksempel.dk</a>
-                </div>
-                <div class="contact-item">
-                    <span>Instagram:</span>
-                    <a href="#" target="_blank">Instagram</a>
-                </div>
-            </div>
-            <div class="privacy-note">
-                <strong>Privatliv:</strong> Vi bruger ingen cookies eller tracking som standard. Denne side samler ikke data om besøgende.
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <div class="logo">PlatformNavn</div>
-        <p>Fakta før holdninger</p>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>© 2025 NuanceretFakta — fakta før holdninger</p>
     </footer>
-
     <script>
-        // Danish case data with new structure: consequences, causes, solutions
-        const casesData = [
-            {
-                id: 1,
-                title: "Pædagogmangel i danske børnehaver",
-                intro: "Manglen på uddannede pædagoger påvirker kvaliteten i børnehaver og betyder øget arbejdspres for eksisterende personale. Dette har direkte konsekvenser for børns trivsel og læring i de tidlige år.",
-                date: "2025-09-20",
-                tags: ["skole"],
-                sources: [
-                    { name: "BUPL - Personalenormeringer 2024", url: "#" },
-                    { name: "KL - Rekrutteringsrapport", url: "#" },
-                    { name: "VIVE - Daginstitutionsanalyse", url: "#" }
-                ],
-                consequences: [
-                    "Færre uddannede pædagoger pr. barn end anbefalet i normeringer",
-                    "Øget brug af ufaglærte vikarer og midlertidige ansættelser",
-                    "Højere sygefravær blandt fastansatte på grund af øget arbejdspres"
-                ],
-                causes: [
-                    "Lavere søgning til pædagoguddannelsen end behov",
-                    "Mange nyuddannede forlader faget inden for få år",
-                    "Høje krav og relativt lavere løn end sammenlignelige uddannelser"
-                ],
-                solutions: [
-                    "Øge optaget til pædagoguddannelsen og styrke SU for studerende",
-                    "Forbedre arbejdsvilkår og karriereveje for at fastholde personale",
-                    "Målrettede lønstigninger for at øge fagets attraktivitet",
-                    "Bedre praktikpladser og mentorstøtte til nyuddannede"
-                ]
-            },
-            {
-                id: 2,
-                title: "Kommunal serviceramme og underforbrug på ældrepleje",
-                intro: "Mange kommuner bruger færre penge på ældrepleje end den vedtagne serviceramme tillader. Dette sker samtidig med, at ventetider og klager stiger, hvilket rejser spørgsmål om økonomistyring versus borgernes behov.",
-                date: "2025-09-15",
-                tags: ["ældre", "kommunaløkonomi"],
-                sources: [
-                    { name: "KL - Økonomisk Redegørelse 2024", url: "#" },
-                    { name: "Ældre Sagen - Ventetidsrapport", url: "#" },
-                    { name: "Social- og Ældreministeriet - Nøgletal", url: "#" }
-                ],
-                consequences: [
-                    "Borgere venter længere på visiterede ydelser som hjemmepleje",
-                    "Kommuner overholder servicelovens krav, men ikke altid borgerens faktiske behov",
-                    "Pårørende må i stigende grad træde til med uformel hjælp"
-                ],
-                causes: [
-                    "Politisk prioritering af besparelser på trods af serviceramme",
-                    "Mangel på kvalificeret personale gør det svært at bruge budgettet",
-                    "Komplekse visitationsregler begrænser adgang til hjælp"
-                ],
-                solutions: [
-                    "Øget gennemsigtighed i kommunernes budgetlægning og forbrug",
-                    "Forenkling af visitationsprocessen for at reducere administrativt spild",
-                    "Rekrutteringsløft til SOSU-området for at kunne levere tildelte ydelser",
-                    "Bedre sammenhæng mellem serviceramme, politiske prioriteringer og faktisk forbrug"
-                ]
-            },
-            {
-                id: 3,
-                title: "Ventetider i børne- og ungdomspsykiatrien",
-                intro: "Mange børn og unge venter længe på psykiatrisk behandling, selvom problemerne er diagnosticeret. De lange ventetider kan forværre symptomer og skabe langvarige konsekvenser for unge menneskers liv.",
-                date: "2025-09-10",
-                tags: ["sundhed", "skole"],
-                sources: [
-                    { name: "Sundhedsstyrelsen - Ventetidsdata", url: "#" },
-                    { name: "Region H - BUP-statistik", url: "#" },
-                    { name: "Børns Vilkår - Årsrapport", url: "#" }
-                ],
-                consequences: [
-                    "Børn og unge med angst, depression eller ADHD venter måneder på behandling",
-                    "Forældrene oplever magtesløshed og manglende støtte",
-                    "Skolefravær og sociale problemer forværres under ventetiden"
-                ],
-                causes: [
-                    "For få børne- og ungdomspsykiatere og psykologer i forhold til behov",
-                    "Stigende antal henvendelser især efter COVID-19",
-                    "Langvarig uddannelsestid og manglende kapacitet på universiteterne"
-                ],
-                solutions: [
-                    "Øge kapaciteten på psykiatriuddannelser og speciallægeuddannelsen",
-                    "Styrke tidlige indsatser via PPR og skoler for at forebygge",
-                    "Flere digitale behandlingstilbud som supplement til fysiske konsultationer",
-                    "Økonomiske incitamenter for psykologer til at arbejde i offentligt regi"
-                ]
-            },
-            {
-                id: 4,
-                title: "Mangel på SOSU'er i hjemmeplejen",
-                intro: "Kommunerne kæmper med at rekruttere og fastholde social- og sundhedshjælpere til ældreplejen. Dette betyder øget pres på eksisterende personale og risiko for at ældre borgere ikke får den pleje, de har brug for.",
-                date: "2025-09-05",
-                tags: ["ældre", "arbejdskraft"],
-                sources: [
-                    { name: "FOA - Arbejdskraftanalyse", url: "#" },
-                    { name: "KL - Rekrutteringsudfordringer", url: "#" },
-                    { name: "Styrelsen for Patientsikkerhed - Tilsyn", url: "#" }
-                ],
-                consequences: [
-                    "Kommuner må anvende dyrere vikarbureauer for at dække vagter",
-                    "Faste medarbejdere arbejder overtime med risiko for udbrændthed",
-                    "Kontinuiteten for ældre borgere lider under skiftende ansigter"
-                ],
-                causes: [
-                    "Fysisk hårdt arbejde med relativt lav løn sammenlignet med andre områder",
-                    "Høj andel af deltidsansættelser gør det svært at leve af lønnen",
-                    "Manglende anerkendelse og karrieremuligheder i faget"
-                ],
-                solutions: [
-                    "Hæve lønnen og forbedre ansættelsesvilkår for at gøre faget mere attraktivt",
-                    "Tilbyde flere fuldtidsstillinger med fast vagtplan",
-                    "Videreuddannelsesmuligheder og karriereveje inden for social- og sundhedsområdet",
-                    "Målrettede kampagner og praktikpladser for at tiltrække unge"
-                ]
-            }
-        ];
+    // Tema-toggle (skifter mellem lys/mørk tilstand)
+    const themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const html = document.documentElement;
+        const current = html.getAttribute('data-theme') || 'dark';
+        const next = current === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        themeBtn.textContent = next === 'light' ? 'Lys tilstand' : 'Mørk tilstand';
+      });
+    }
 
-        let currentFilter = 'alle';
-        let searchTerm = '';
-
-        // Render cases with new structure
-        function renderCases() {
-            const grid = document.getElementById('casesGrid');
-            const filteredCases = casesData.filter(caseItem => {
-                const matchesFilter = currentFilter === 'alle' || caseItem.tags.includes(currentFilter);
-                const searchLower = searchTerm.toLowerCase();
-                const matchesSearch = 
-                    caseItem.title.toLowerCase().includes(searchLower) || 
-                    caseItem.intro.toLowerCase().includes(searchLower) ||
-                    caseItem.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
-                    caseItem.sources.some(source => source.name.toLowerCase().includes(searchLower));
-                return matchesFilter && matchesSearch;
-            });
-
-            if (filteredCases.length === 0) {
-                grid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">Ingen problemstillinger matcher dine søgekriterier.</p>';
-                return;
-            }
-
-            grid.innerHTML = filteredCases.map(caseItem => `
-                <div class="case-card">
-                    <h3>${caseItem.title}</h3>
-                    <p class="case-intro">${caseItem.intro}</p>
-                    <div class="case-meta">
-                        <span>Sidst opdateret: ${caseItem.date}</span>
-                    </div>
-                    <div class="case-sources">
-                        ${caseItem.sources.map(source => 
-                            `<a href="${source.url}" class="source-badge">${source.name}</a>`
-                        ).join('')}
-                    </div>
-                    <div class="case-section">
-                        <h4>Konsekvenser</h4>
-                        <ul>
-                            ${caseItem.consequences.map(item => `<li>${item}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="case-section">
-                        <h4>Mulige årsager</h4>
-                        <ul>
-                            ${caseItem.causes.map(item => `<li>${item}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="case-section">
-                        <h4>Løsningsforslag</h4>
-                        <ul>
-                            ${caseItem.solutions.map(item => `<li>${item}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="case-tags">
-                        ${caseItem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            `).join('');
+    // Smooth scroll for navigation
+    document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
         }
-
-        // Search functionality
-        document.getElementById('searchBar').addEventListener('input', (e) => {
-            searchTerm = e.target.value;
-            renderCases();
-        });
-
-        // Filter chips functionality
-        document.getElementById('filterChips').addEventListener('click', (e) => {
-            if (e.target.classList.contains('chip')) {
-                document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.dataset.filter;
-                renderCases();
-            }
-        });
-
-        // Theme toggle functionality
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', newTheme);
-            document.getElementById('themeToggle').textContent = newTheme === 'light' ? 'Mørk tilstand' : 'Lys tilstand';
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Initial render
-        renderCases();
+      });
+    });
     </script>
 </body>
 </html>
