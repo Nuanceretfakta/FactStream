@@ -646,17 +646,43 @@
   <p>Åbne data, klar analyse, konkrete løsninger. Alt gratis og gennemsigtigt.</p>
   <p style="margin-top: 10px;">Har du en problemstilling, du gerne vil have undersøgt? Tryk på knappen nedenfor for at indsende dit forslag.</p>
 
-  <a href="https://forms.gle/DIN_FORM_URL"
-     class="hero-cta"
-     target="_blank"
-     rel="noopener">
-    Foreslå en problemstilling
+  <a href="#foreslaa-emne" class="hero-cta" rel="noopener">
+  Foreslå et emne
+</a>
+
   </a>
 </section>
 
 
 
-    </a>
+  <section id="foreslaa-emne" class="section">
+  <h2>Foreslå et emne, vi undersøger</h2>
+  <p>Har du set et problem, der bør belyses med fakta? Send det til os her.</p>
+
+  <form name="emneforslag" method="POST" data-netlify="true" class="form">
+    <input type="hidden" name="form-name" value="emneforslag" />
+
+    <div class="form-row">
+      <label for="navn">Navn (valgfrit)</label>
+      <input id="navn" name="navn" type="text" />
+    </div>
+
+    <div class="form-row">
+      <label for="email">Email (så vi kan følge op)</label>
+      <input id="email" name="email" type="email" required />
+    </div>
+
+    <div class="form-row">
+      <label for="beskrivelse">Beskriv emnet eller problemet kort</label>
+      <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      Send forslag
+    </button>
+  </form>
+</section>
+
 
     <!-- Gør knappen aktiv ved at sætte dit link ind -->
 <section id="om" class="section">
@@ -724,6 +750,15 @@
     <footer class="footer">
       <p>© 2025 NuanceretFakta — fakta før holdninger</p>
     </footer>
+    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
+  <input type="hidden" name="form-name" value="emneforslag" />
+  <p style="display:none">
+    <label>Hvis du er et menneske, lad dette stå tomt: <input name="bot-field" /></label>
+  </p>
+  <input type="text" name="navn" />
+  <input type="email" name="email" />
+  <textarea name="beskrivelse"></textarea>
+</form>
     <script>
     // Tema-toggle (skifter mellem lys/mørk tilstand)
     const themeBtn = document.getElementById('themeToggle');
