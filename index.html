@@ -640,28 +640,24 @@
       </nav>
     </header>
 
-    <section class="hero">
-      <span class="brand-hero">NuanceretFakta</span>
-      <h1>Fakta før holdninger</h1>
-      <p>Åbne data, klar analyse, konkrete løsninger. Alt gratis og gennemsigtigt.</p>
-        <a href="#kontakt" class="hero-cta">Foreslå en problemstilling</a>
-
-    </section>
+    <!-- FORESLÅ PROBLEMSTILLING -->
 <section id="problemstilling" class="section">
   <h2>Foreslå en problemstilling</h2>
-  <!-- Netlify/anden formular her -->
+  <p>Har du en samfundsproblematik, du mener bør undersøges? Skriv dit forslag her.</p>
+
   <form name="problemstilling" method="POST" data-netlify="true">
-    <input type="hidden" name="form-name" value="problemstilling" />
-    <label>Emne
-      <input type="text" name="emne" required>
-    </label>
-    <label>Beskrivelse
-      <textarea name="beskrivelse" rows="5" required></textarea>
-    </label>
-    <label>Din e-mail (valgfri)
-      <input type="email" name="email">
-    </label>
-    <button type="submit">Send</button>
+    <input type="hidden" name="form-name" value="problemstilling">
+    
+    <label for="navn">Dit navn (valgfrit):</label>
+    <input type="text" id="navn" name="navn" placeholder="Skriv dit navn...">
+
+    <label for="email">Din e-mail (valgfrit):</label>
+    <input type="email" id="email" name="email" placeholder="fx kontakt@nuanceretfakta.dk">
+
+    <label for="problemstilling">Problemstilling:</label>
+    <textarea id="problemstilling" name="problemstilling" rows="5" placeholder="Skriv kort din idé eller problemstilling..."></textarea>
+
+    <button type="submit" class="button">Send forslag</button>
   </form>
 </section>
 
