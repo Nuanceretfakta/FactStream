@@ -764,50 +764,55 @@
   .btn-primary:hover{filter:brightness(1.05)}
   .modal-close{position:absolute;top:10px;right:12px;background:transparent;border:0;color:#bbb;font-size:18px;cursor:pointer}
 </style>
-    <script>
-    // Tema-toggle (skifter mellem lys/mørk tilstand)
-    const themeBtn = document.getElementById('themeToggle');
-    if (themeBtn) {
-      themeBtn.addEventListener('click', () => {
-        const html = document.documentElement;
-        const current = html.getAttribute('data-theme') || 'dark';
-        const next = current === 'light' ? 'dark' : 'light';
-        html.setAttribute('data-theme', next);
-        themeBtn.textContent = next === 'light' ? 'Lys tilstand' : 'Mørk tilstand';
-      });
-    }
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Tema-toggle
+  const themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      themeBtn.textContent = next === 'light' ? 'Lys tilstand' : 'Mørk tilstand';
+    });
+  }
 
-    // Smooth scroll for navigation
-    document.querySelectorAll('nav a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const id = a.getAttribute('href');
-        const target = document.querySelector(id);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
- // --- Modal åbne/lukke funktion ---
-  const modal = document.getElementById('suggestModal');
-  const openBtn = document.getElementById('openModalBtn');
+  // Smooth scroll for navigation
+  document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      const target = document.querySelector(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ----- Modal: åbne/lukke -----
+  const modal    = document.getElementById('suggestModal');
+  const openBtn  = document.getElementById('openModalBtn');
   const closeBtn = document.getElementById('closeModalBtn');
 
   function openModal() {
+    if (!modal) return;
     modal.classList.add('show');
-    modal.setAttribute('aria-hidden', 'false');
+    modal.setAttribute('aria-hidden','false');
   }
 
   function closeModal() {
+    if (!modal) return;
     modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('aria-hidden','true');
   }
 
-  openBtn?.addEventListener('click', openModal);
-  closeBtn?.addEventListener('click', closeModal);
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
-    </script>
+  if (openBtn)  openBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (modal)    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+});
+</script>
+
 </body>
 </html>
