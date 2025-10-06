@@ -646,8 +646,8 @@
   <p>Åbne data, klar analyse, konkrete løsninger. Alt gratis og gennemsigtigt.</p>
   <p style="margin-top: 10px;">Har du en problemstilling, du gerne vil have undersøgt? Tryk på knappen nedenfor for at indsende dit forslag.</p>
 
-  <a href="#foreslaa-emne" class="hero-cta" rel="noopener">
-  Foreslå et emne
+<button class="hero-cta" id="openModalBtn">Foreslå et emne</button>
+
 </a>
 
   </a>
@@ -750,15 +750,46 @@
     <footer class="footer">
       <p>© 2025 NuanceretFakta — fakta før holdninger</p>
     </footer>
-    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
-  <input type="hidden" name="form-name" value="emneforslag" />
-  <p style="display:none">
-    <label>Hvis du er et menneske, lad dette stå tomt: <input name="bot-field" /></label>
-  </p>
-  <input type="text" name="navn" />
-  <input type="email" name="email" />
-  <textarea name="beskrivelse"></textarea>
-</form>
+           }
+      });
+    });<!-- Modal: Foreslå emne -->
+<div id="suggestModal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal">
+    <button class="modal-close" id="closeModalBtn" aria-label="Luk">✕</button>
+    <h3>Foreslå et emne</h3>
+    <p>Beskriv kort hvad vi bør undersøge. Vi vender tilbage, hvis vi har brug for mere.</p>
+
+    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="emneforslag" />
+      <p style="display:none">
+        <label>Hvis du er et menneske, lad dette stå tomt: <input name="bot-field" /></label>
+      </p>
+
+      <label for="navn">Navn (valgfrit)</label>
+      <input id="navn" name="navn" type="text" />
+
+      <label for="email">Email (så vi kan følge op)</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="beskrivelse">Beskriv emnet kort</label>
+      <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
+
+      <button type="submit" class="btn-primary">Send forslag</button>
+    </form>
+  </div>
+</div>
+<style>
+  .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:1000;padding:16px}
+  .modal-backdrop.show{display:flex}
+  .modal{width:100%;max-width:560px;background:var(--card-bg,#111);color:var(--text,#f5f5f5);border-radius:16px;padding:24px;box-shadow:0 10px 40px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);position:relative}
+  .modal h3{margin:0 0 8px}
+  .modal p{margin:0 0 12px;opacity:.9}
+  .modal label{display:block;margin:12px 0 6px}
+  .modal input,.modal textarea{width:100%;background:#0d0f12;border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:10px}
+  .btn-primary{margin-top:14px;display:inline-block;background:#17b6a4;color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer}
+  .btn-primary:hover{filter:brightness(1.05)}
+  .modal-close{position:absolute;top:10px;right:12px;background:transparent;border:0;color:#bbb;font-size:18px;cursor:pointer}
+</style>
     <script>
     // Tema-toggle (skifter mellem lys/mørk tilstand)
     const themeBtn = document.getElementById('themeToggle');
@@ -780,9 +811,29 @@
         if (target) {
           e.preventDefault();
           target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
+ // --- Modal åbne/lukke funktion ---
+  const modal = document.getElementById('suggestModal');
+  const openBtn = document.getElementById('openModalBtn');
+  const closeBtn = document.getElementById('closeModalBtn');
+
+  function openModal() {
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  openBtn?.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
     </script>
 </body>
 </html>
