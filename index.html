@@ -647,11 +647,29 @@
         <a href="#kontakt" class="hero-cta">Foreslå en problemstilling</a>
 
     </section>
+<section id="problemstilling" class="section">
+  <h2>Foreslå en problemstilling</h2>
+  <!-- Netlify/anden formular her -->
+  <form name="problemstilling" method="POST" data-netlify="true">
+    <input type="hidden" name="form-name" value="problemstilling" />
+    <label>Emne
+      <input type="text" name="emne" required>
+    </label>
+    <label>Beskrivelse
+      <textarea name="beskrivelse" rows="5" required></textarea>
+    </label>
+    <label>Din e-mail (valgfri)
+      <input type="email" name="email">
+    </label>
+    <button type="submit">Send</button>
+  </form>
+</section>
 
     </a>
 
     <!-- Gør knappen aktiv ved at sætte dit link ind -->
-    <section id="om" class="section">
+<section id="om" class="section">
+
     <h2>Om os</h2>
       <p><strong>Hvem er vi:</strong> Vi er en uafhængig platform uden politisk tilknytning. Vi går ikke op i højre eller venstre, men tror på, at nuancerede og objektive analyser kan understøtte bedre løsninger og beslutninger.</p>
 
