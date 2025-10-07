@@ -759,7 +759,11 @@
     <h3>Foreslå et emne</h3>
     <p>Beskriv kort hvad vi bør undersøge. Vi vender tilbage, hvis vi har brug for mere.</p>
 
-   <form id="emneForm" name="emneforslag" method="POST" action="/" netlify netlify-honeypot="bot-field">
+   <form name="emneforslag"
+      method="POST"
+      data-netlify="true"
+      onsubmit="alert('Tak for dit forslag! Det er nu sendt afsted.'); return true;">
+
 
       <input type="hidden" name="form-name" value="emneforslag" />
       <p style="display:none;">
