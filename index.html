@@ -749,29 +749,33 @@
            }
       });
     });<!-- Modal: Foreslå emne -->
-<div id="suggestModal" class="modal-backdrop" aria-hidden="true">
-  <div class="modal">
-    <button class="modal-close" id="closeModalBtn" aria-label="Luk">✕</button>
-    <h3>Foreslå et emne</h3>
-    <p>Beskriv kort hvad vi bør undersøge. Vi vender tilbage, hvis vi har brug for mere.</p>
+<form id="emneForm"
+      name="emneforslag"
+      method="POST"
+      action="/"
+      data-netlify="true"
+      netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="emneforslag" />
+  <p style="display:none">
+    <label>Hvis du er et menneske, lad dette stå tomt: <input name="bot-field" /></label>
+  </p>
 
-    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="emneforslag" />
-      <p style="display:none">
-        <label>Hvis du er et menneske, lad dette stå tomt: <input name="bot-field" /></label>
-      </p>
+  <label for="navn">Navn (valgfrit)</label>
+  <input id="navn" name="navn" type="text" />
 
-      <label for="navn">Navn (valgfrit)</label>
-      <input id="navn" name="navn" type="text" />
+  <label for="email">Email (så vi kan følge op)</label>
+  <input id="email" name="email" type="email" required />
 
-      <label for="email">Email (så vi kan følge op)</label>
-      <input id="email" name="email" type="email" required />
+  <label for="beskrivelse">Beskriv emnet kort</label>
+  <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
 
-      <label for="beskrivelse">Beskriv emnet kort</label>
-      <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
+  <button type="submit" class="btn-primary">Send forslag</button>
+</form>
 
-      <button type="submit" class="btn-primary">Send forslag</button>
-    </form>
+<!-- Tak besked (skjult fra start) -->
+<p id="takBesked" style="display:none; color:#1abc9c; font-weight:500; margin-top:12px;">
+  Tak for dit forslag! Vi har modtaget det.
+</p>
   </div>
 </div>
 <style>
@@ -825,6 +829,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ← manglende lukning af DOMContentLoaded:
 });
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("emneForm");
+  const takBesked = document.getElementById("takBesked");
+  const modal = document.getElementById("sugestModal");
+
+  if (form) {
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const formData = new FormData(form);
+
+      try {
+        await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(formData).toString(),
+        });
+        form.reset();
+        takBesked.style.display = "block";
+
+        // Luk modal efter 4 sekunder
+        setTimeout(() => {
+          takBesked.style.display = "none";
+          if (modal) modal.classList.remove("show");
+        }, 4000);
+      } catch (error) {
+        alert("Noget gik galt – prøv igen om lidt.");
+      }
+    });
+  }
+});
+</script>
+      
 </script>
 
 </body>
