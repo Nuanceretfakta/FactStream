@@ -759,7 +759,8 @@
     <h3>Foreslå et emne</h3>
     <p>Beskriv kort hvad vi bør undersøge. Vi vender tilbage, hvis vi har brug for mere.</p>
 
-    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/">
+   <form id="emneForm" name="emneforslag" method="POST" action="/" netlify netlify-honeypot="bot-field">
+
       <input type="hidden" name="form-name" value="emneforslag" />
       <p style="display:none;">
         <label>Hvis du er et menneske, lad dette stå tomt:
@@ -843,39 +844,6 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("Noget gik galt – prøv igen om lidt.");
       }
     });
-  }
-});
-document.addEventListener('DOMContentLoaded', () => {
-  const modal    = document.getElementById('suggestModal');
-  const openBtn  = document.getElementById('openModalBtn');
-  const closeBtn = document.getElementById('closeModalBtn');
-
-  function openModal() {
-    if (!modal) return;
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeModal() {
-    if (!modal) return;
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-  }
-
-  if (openBtn)  openBtn.addEventListener('click',  (e) => { e.preventDefault(); openModal(); });
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-  // Luk ved klik på backdrop
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-  }
-
-  // Luk ved Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
 });
 </script>
 </body>
