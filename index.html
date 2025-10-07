@@ -643,7 +643,7 @@
   <span class="brand-hero">NuanceretFakta</span>
   <h1>Fakta før holdninger</h1>
   <p>Åbne data, klar analyse, konkrete løsninger. Alt gratis og gennemsigtigt.</p>
-  <p style="margin-top: 10px;">Har du en problemstilling, du gerne vil have undersøgt? Tryk på knappen nedenfor for at indsende dit forslag.</p>
+  <p style="margin-top: 10px;">Har du en problemstilling eller et emne, du gerne vil have undersøgt? Tryk på knappen nedenfor for at indsende dit forslag.</p>
 
 <button class="hero-cta" id="openModalBtn">Foreslå et emne</button>
 
@@ -748,7 +748,7 @@
     </footer>
            }
       });
-    <!-- Modal: Foreslå emne -->
+   <!-- Modal: Foreslå et emne -->
 <div id="suggestModal" class="modal-backdrop" aria-hidden="true">
   <div class="modal">
     <button class="modal-close" id="closeModalBtn" aria-label="Luk">×</button>
@@ -756,7 +756,7 @@
     <h3>Foreslå et emne</h3>
     <p>Beskriv kort hvad vi bør undersøge. Vi vender tilbage, hvis vi har brug for mere.</p>
 
-    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/">
       <input type="hidden" name="form-name" value="emneforslag" />
       <p style="display:none;">
         <label>Hvis du er et menneske, lad dette stå tomt:
@@ -774,12 +774,12 @@
       <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
 
       <button type="submit" class="btn-primary">Send forslag</button>
-    </form>
 
-    <!-- (Valgfri) tak-besked. Vi tænder den senere med JS, når du ønsker det. -->
-    <p id="takBesked" style="display:none;margin-top:12px;color:#1abc9c;font-weight:600;">
-      Tak! Dit forslag er sendt.
-    </p>
+      <!-- Tak-besked -->
+      <p id="takBesked" style="display:none;margin-top:12px;color:#1abc9c;font-weight:600;">
+        Tak! Dit forslag er sendt.
+      </p>
+    </form>
   </div>
 </div>
 <style>
@@ -808,29 +808,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // ----- Modal: åbne/lukke -----
-  const modal    = document.getElementById('suggestModal');
-  const openBtn  = document.getElementById('openModalBtn');
-  const closeBtn = document.getElementById('closeModalBtn');
-
-  function openModal() {
-    if (!modal) return;
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden','false');
-  }
-
-  function closeModal() {
-    if (!modal) return;
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden','true');
-  }
-
-  if (openBtn)  openBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (modal)    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
 // ← manglende lukning af DOMContentLoaded:
 document.addEventListener("DOMContentLoaded", function() {
   const form = document.querySelector('form[name="emneforslag"]');
@@ -862,8 +839,38 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const modal    = document.getElementById('suggestModal');
+  const openBtn  = document.getElementById('openModalBtn');
+  const closeBtn = document.getElementById('closeModalBtn');
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  if (openBtn)  openBtn.addEventListener('click',  (e) => { e.preventDefault(); openModal(); });
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+  // Luk ved klik på backdrop
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Luk ved Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+});
 </script>
-
-
 </body>
 </html>
