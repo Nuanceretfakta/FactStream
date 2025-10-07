@@ -636,7 +636,6 @@
         <a href="#om">Om os</a>
         <a href="#udgivelser">Udgivelser</a>
         <a href="#kontakt">Kontakt</a>
-        <button class="theme-toggle" id="themeToggle">Mørk tilstand</button>
       </nav>
     </header>
 
@@ -789,18 +788,7 @@
 </style>
   <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // Tema-toggle
-  const themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const html = document.documentElement;
-      const current = html.getAttribute('data-theme') || 'dark';
-      const next = current === 'light' ? 'dark' : 'light';
-      html.setAttribute('data-theme', next);
-      themeBtn.textContent = next === 'light' ? 'Lys tilstand' : 'Mørk tilstand';
-    });
-  }
-
+  
   // Smooth scroll for navigation
   document.querySelectorAll('nav a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
