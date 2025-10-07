@@ -748,34 +748,38 @@
     </footer>
            }
       });
-    });<!-- Modal: Foreslå emne -->
-<form id="emneForm"
-      name="emneforslag"
-      method="POST"
-      action="/"
-      data-netlify="true"
-      netlify-honeypot="bot-field">
-  <input type="hidden" name="form-name" value="emneforslag" />
-  <p style="display:none">
-    <label>Hvis du er et menneske, lad dette stå tomt: <input name="bot-field" /></label>
-  </p>
+    <!-- Modal: Foreslå emne -->
+<div id="suggestModal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal">
+    <button class="modal-close" id="closeModalBtn" aria-label="Luk">×</button>
 
-  <label for="navn">Navn (valgfrit)</label>
-  <input id="navn" name="navn" type="text" />
+    <h3>Foreslå et emne</h3>
+    <p>Beskriv kort hvad vi bør undersøge. Vi vender tilbage, hvis vi har brug for mere.</p>
 
-  <label for="email">Email (så vi kan følge op)</label>
-  <input id="email" name="email" type="email" required />
+    <form name="emneforslag" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="emneforslag" />
+      <p style="display:none;">
+        <label>Hvis du er et menneske, lad dette stå tomt:
+          <input name="bot-field" />
+        </label>
+      </p>
 
-  <label for="beskrivelse">Beskriv emnet kort</label>
-  <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
+      <label for="navn">Navn (valgfrit)</label>
+      <input id="navn" name="navn" type="text" />
 
-  <button type="submit" class="btn-primary">Send forslag</button>
-</form>
+      <label for="email">Email (så vi kan følge op)</label>
+      <input id="email" name="email" type="email" required />
 
-<!-- Tak besked (skjult fra start) -->
-<p id="takBesked" style="display:none; color:#1abc9c; font-weight:500; margin-top:12px;">
-  Tak for dit forslag! Vi har modtaget det.
-</p>
+      <label for="beskrivelse">Beskriv emnet kort</label>
+      <textarea id="beskrivelse" name="beskrivelse" rows="5" required></textarea>
+
+      <button type="submit" class="btn-primary">Send forslag</button>
+    </form>
+
+    <!-- (Valgfri) tak-besked. Vi tænder den senere med JS, når du ønsker det. -->
+    <p id="takBesked" style="display:none;margin-top:12px;color:#1abc9c;font-weight:600;">
+      Tak! Dit forslag er sendt.
+    </p>
   </div>
 </div>
 <style>
@@ -828,12 +832,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
 // ← manglende lukning af DOMContentLoaded:
-});
-<script>
 document.addEventListener("DOMContentLoaded", function() {
-  const form = document.getElementById("emneForm");
+  const form = document.querySelector('form[name="emneforslag"]');
   const takBesked = document.getElementById("takBesked");
-  const modal = document.getElementById("sugestModal");
+  const modal = document.getElementById("suggestModal");
 
   if (form) {
     form.addEventListener("submit", async function(event) {
@@ -861,8 +863,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 </script>
-      
-</script>
+
 
 </body>
 </html>
