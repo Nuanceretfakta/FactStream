@@ -1,0 +1,7 @@
+Anna | Jeg vil gerne kende prisen | pris | 0.9 | kræver_menneske=nej
+Peter | Hvornår har I åbent i morgen? | åbningstider | 0.9 | kræver_menneske=nej
+Sara | Kan jeg booke en tid på fredag? | booking | 0.9 | kræver_menneske=nej
+Maja | Har I gavekort? | andet | 0.4 | kræver_menneske=ja
+Jonas | Hvad koster det at få lavet farve? | pris | 0.9 | kræver_menneske=nej
+Nadia | Hvornår lukker I i dag? | andet | 0.6 | kræver_menneske=ja
+Emil | Kan jeg reservere en tid næste uge? | booking | 0.9 | kræver_menneske=nej
