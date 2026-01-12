@@ -1,0 +1,54 @@
+import csv
+from collections import defaultdict
+
+CSV_FIL = "henvendelser.csv"
+
+antal_pr_kategori = defaultdict(int)
+minutter_pr_kategori = defaultdict(float)
+
+total_sager = 0
+total_minutter = 0.0
+
+with open(CSV_FIL, newline="", encoding="utf-8") as f:
+    # skipinitialspace hjælper hvis der står "kategori, tid_minutter, dato"
+    reader = csv.DictReader(f, skipinitialspace=True)
+
+    # Normalisér headers: trim spaces i kolonnenavne
+    if reader.fieldnames is None:
+        raise ValueError("CSV ser tom ud eller mangler header-række.")
+
+    reader.fieldnames = [h.strip() for h in reader.fieldnames]
+
+    required = {"kategori", "tid_minutter", "dato"}
+    if not required.issubset(set(reader.fieldnames)):
+        raise ValueError(
+            f"CSV mangler kolonner.\nFandt: {reader.fieldnames}\nForventer: {sorted(required)}"
+        )
+
+    for row in reader:
+        # Normalisér også keys/values pr. række
+        row = {k.strip(): (v.strip() if isinstance(v, str) else v) for k, v in row.items()}
+
+        kategori = row["kategori"]
+        tid_minutter = row["tid_minutter"]
+
+        if not kategori or not tid_minutter:
+            continue
+
+        minutter = float(tid_minutter)
+
+        antal_pr_kategori[kategori] += 1
+        minutter_pr_kategori[kategori] += minutter
+
+        total_sager += 1
+        total_minutter += minutter
+
+print("\n📊 LEDEROVERBLIK – HENVENDELSER (Dag 36)\n")
+
+# Sortér efter mest tid (ledervenligt)
+for kategori, min_sum in sorted(minutter_pr_kategori.items(), key=lambda x: x[1], reverse=True):
+    timer = min_sum / 60
+    print(f"- {kategori}: {antal_pr_kategori[kategori]} sager | {timer:.1f} timer")
+
+print("\n📌 Samlet:")
+print(f"- {total_sager} sager | {total_minutter/60:.1f} timer\n")
