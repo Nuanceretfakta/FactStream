@@ -1,0 +1,89 @@
+# day35.py
+# Dag 35 – Beslutningspakke (endeligt overblik)
+
+# Datasæt (samme logik som dag 32–34): sagstype + tid (min)
+henvendelser = [
+    {"sagstype": "ferie", "tid_min": 5},
+    {"sagstype": "sygefravær", "tid_min": 45},
+    {"sagstype": "password", "tid_min": 10},
+    {"sagstype": "udstyr", "tid_min": 30},
+    {"sagstype": "password", "tid_min": 12},
+    {"sagstype": "udstyr", "tid_min": 20},
+    {"sagstype": "ferie", "tid_min": 15},
+    {"sagstype": "sygefravær", "tid_min": 35},
+    {"sagstype": "kontrakt", "tid_min": 25},
+    {"sagstype": "support", "tid_min": 18},
+    {"sagstype": "udstyr", "tid_min": 22},
+    {"sagstype": "ferie", "tid_min": 8},
+]
+
+# Antagelser for beslutningspakke
+ARBEJDSDAGE_PR_UGE = 5
+
+# "Automatiseres nu" = simple og standardiserbare sagstyper
+AUTOMATISER_NU = {"password", "ferie"}
+
+
+def beregn_tid_pr_sagstype(data: list[dict]) -> dict[str, int]:
+    tid_pr_type = {}
+    for sag in data:
+        sagstype = sag.get("sagstype", "andet")
+        tid = sag.get("tid_min", 0)
+        if not isinstance(tid, (int, float)):
+            tid = 0
+        tid_pr_type[sagstype] = tid_pr_type.get(sagstype, 0) + int(tid)
+    return tid_pr_type
+
+
+def pct(del_tal: int, hel_tal: int) -> float:
+    if hel_tal == 0:
+        return 0.0
+    return (del_tal / hel_tal) * 100
+
+
+def beslutningspakke(tid_pr_type: dict[str, int]) -> None:
+    total_dag = sum(tid_pr_type.values())
+
+    # Top 3 efter tidsforbrug
+    sorteret = sorted(tid_pr_type.items(), key=lambda x: x[1], reverse=True)
+    top3 = sorteret[:3]
+
+    # Estimeret besparelse pr. dag (best case: 100% automation af "AUTOMATISER_NU")
+    besparelse_dag_min = sum(tid for sagstype, tid in tid_pr_type.items() if sagstype in AUTOMATISER_NU)
+    besparelse_dag_pct = pct(besparelse_dag_min, total_dag)
+
+    # Pr. uge
+    besparelse_uge_min = besparelse_dag_min * ARBEJDSDAGE_PR_UGE
+    total_uge_min = total_dag * ARBEJDSDAGE_PR_UGE
+    besparelse_uge_pct = pct(besparelse_uge_min, total_uge_min)
+
+    # 1-sætnings anbefaling: fokusér på de automatable i top3 hvis de findes, ellers top automatable generelt
+    automatable_i_top3 = [s for s, _ in top3 if s in AUTOMATISER_NU]
+    if automatable_i_top3:
+        anbefaling = f"Prioritér automation af {', '.join(automatable_i_top3)} først, da de er standardiserbare og frigør tid hurtigt."
+    else:
+        anbefaling = "Prioritér automation af de mest standardiserbare sagstyper (fx password/ferie) før komplekse sager som sygefravær."
+
+    # Print beslutningspakke (ledelsesklart)
+    print("Dag 35 – Beslutningspakke (overblik til ledelse)")
+    print("-" * 65)
+
+    print("Top 3 sagstyper efter tidsforbrug (pr. dag):")
+    for i, (sagstype, tid) in enumerate(top3, start=1):
+        kan_auto = "JA" if sagstype in AUTOMATISER_NU else "NEJ"
+        andel = pct(tid, total_dag)
+        print(f"{i}) {sagstype}: {tid} min ({andel:.1f}% af tiden) | Automatiseres nu: {kan_auto}")
+
+    print("-" * 65)
+    print("Estimeret effekt ved automation (best case for simple sagstyper):")
+    print(f"- Nuværende tidsforbrug pr. uge: {total_uge_min} min")
+    print(f"- Estimeret tidsbesparelse pr. uge: {besparelse_uge_min} min ({besparelse_uge_pct:.1f}%)")
+
+    print("-" * 65)
+    print("Anbefaling:")
+    print(f"- {anbefaling}")
+
+
+if __name__ == "__main__":
+    tid_pr_type = beregn_tid_pr_sagstype(henvendelser)
+    beslutningspakke(tid_pr_type)
