@@ -1,0 +1,103 @@
+# Daily admin overview – generated automatically
+
+import csv
+from collections import defaultdict
+from pathlib import Path
+
+INPUT_CSV = "henvendelser.csv"
+OUTPUT_CSV = "daily_overview.csv"
+
+
+def read_and_aggregate(input_path: str) -> tuple[dict[str, int], dict[str, float]]:
+    """
+    Reads input CSV and aggregates:
+    - count per category
+    - total minutes per category
+    Expects columns: kategori, tid_minutter, dato
+    """
+    antal_pr_kategori = defaultdict(int)
+    minutter_pr_kategori = defaultdict(float)
+
+    with open(input_path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f, skipinitialspace=True)
+
+        if reader.fieldnames is None:
+            return {}, {}
+
+        # Normalize headers (Sheets can add trailing spaces)
+        reader.fieldnames = [h.strip() for h in reader.fieldnames]
+
+        required = {"kategori", "tid_minutter", "dato"}
+        if not required.issubset(set(reader.fieldnames)):
+            raise ValueError(
+                f"CSV mangler kolonner.\nFandt: {reader.fieldnames}\nForventer: {sorted(required)}"
+            )
+
+        for row in reader:
+            # Normalize row keys/values
+            row = {k.strip(): (v.strip() if isinstance(v, str) else v) for k, v in row.items()}
+
+            kategori = row.get("kategori", "")
+            tid_minutter = row.get("tid_minutter", "")
+
+            if not kategori or not tid_minutter:
+                continue
+
+            minutter = float(tid_minutter)
+            antal_pr_kategori[kategori] += 1
+            minutter_pr_kategori[kategori] += minutter
+
+    return dict(antal_pr_kategori), dict(minutter_pr_kategori)
+
+
+def build_output_rows(
+    antal_pr_kategori: dict[str, int],
+    minutter_pr_kategori: dict[str, float],
+) -> list[tuple[str, int, float]]:
+    """Returns rows: (kategori, antal, samlet_tid_timer), sorted by samlet_tid desc."""
+    rows = []
+    for kategori, min_sum in minutter_pr_kategori.items():
+        antal = antal_pr_kategori.get(kategori, 0)
+        samlet_tid_timer = round(min_sum / 60, 2)
+        rows.append((kategori, antal, samlet_tid_timer))
+
+    rows.sort(key=lambda x: x[2], reverse=True)
+    return rows
+
+
+def write_overview_csv(output_path: str, rows: list[tuple[str, int, float]]) -> None:
+    """Writes the overview CSV with clear column names."""
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["kategori", "antal", "samlet_tid"])
+        writer.writerows(rows)
+
+
+def main() -> None:
+    input_file = Path(INPUT_CSV)
+    if not input_file.exists():
+        print(f"❌ Mangler inputfil: {INPUT_CSV}")
+        return
+
+    antal, minutter = read_and_aggregate(INPUT_CSV)
+
+    # Validation: no usable data
+    if not antal or not minutter:
+        print("Ingen data i dag")
+        return
+
+    rows = build_output_rows(antal, minutter)
+    write_overview_csv(OUTPUT_CSV, rows)
+
+    print("\n✅ Dag 38 – robust output klar")
+    print(f"- Input:  {INPUT_CSV}")
+    print(f"- Output: {OUTPUT_CSV}\n")
+
+    print("📄 Preview (kategori | antal | samlet_tid timer):")
+    for kategori, antal_sager, tid_timer in rows:
+        print(f"- {kategori} | {antal_sager} | {tid_timer}")
+    print()
+
+
+if __name__ == "__main__":
+    main()
