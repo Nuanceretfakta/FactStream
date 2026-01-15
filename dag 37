@@ -1,0 +1,63 @@
+import csv
+from collections import defaultdict
+
+INPUT_CSV = "henvendelser.csv"
+OUTPUT_CSV = "daily_overview.csv"
+
+antal_pr_kategori = defaultdict(int)
+minutter_pr_kategori = defaultdict(float)
+
+# 1) Læs input
+with open(INPUT_CSV, newline="", encoding="utf-8") as f:
+    reader = csv.DictReader(f, skipinitialspace=True)
+
+    if reader.fieldnames is None:
+        raise ValueError("Input CSV mangler header-række eller er tom.")
+
+    # Trim spaces i kolonnenavne (Sheets kan lave 'kategori ' osv.)
+    reader.fieldnames = [h.strip() for h in reader.fieldnames]
+
+    required = {"kategori", "tid_minutter", "dato"}
+    if not required.issubset(set(reader.fieldnames)):
+        raise ValueError(
+            f"CSV mangler kolonner.\nFandt: {reader.fieldnames}\nForventer: {sorted(required)}"
+        )
+
+    for row in reader:
+        # Trim keys/values pr række
+        row = {k.strip(): (v.strip() if isinstance(v, str) else v) for k, v in row.items()}
+
+        kategori = row["kategori"]
+        tid_minutter = row["tid_minutter"]
+
+        if not kategori or not tid_minutter:
+            continue
+
+        minutter = float(tid_minutter)
+
+        antal_pr_kategori[kategori] += 1
+        minutter_pr_kategori[kategori] += minutter
+
+# 2) Skriv output (leder/automation-klar struktur)
+rows = []
+for kategori in minutter_pr_kategori:
+    antal = antal_pr_kategori[kategori]
+    samlet_tid_timer = round(minutter_pr_kategori[kategori] / 60, 2)  # timer med 2 decimaler
+    rows.append((kategori, antal, samlet_tid_timer))
+
+# Sortér efter mest tid (praktisk i automation og ledelsesoverblik)
+rows.sort(key=lambda x: x[2], reverse=True)
+
+with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["kategori", "antal", "samlet_tid"])  # kolonnenavne der giver mening
+    writer.writerows(rows)
+
+print("\n✅ Dag 37 – Output klar")
+print(f"- Input:  {INPUT_CSV}")
+print(f"- Output: {OUTPUT_CSV}\n")
+
+print("📄 Preview (kategori | antal | samlet_tid timer):")
+for kategori, antal, tid in rows:
+    print(f"- {kategori} | {antal} | {tid}")
+print()
