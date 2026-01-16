@@ -1,0 +1,81 @@
+# Day 39 – form data validation (Python)
+
+ALLOWED_AFDELINGER = {"HR", "IT", "Økonomi", "Andet"}
+
+
+def validate(entry: dict) -> tuple[bool, list[str]]:
+    """
+    Validates a single form entry.
+    Returns (is_valid, list_of_errors)
+    """
+    errors = []
+
+    navn = entry.get("navn", "").strip()
+    afdeling = entry.get("afdeling", "").strip()
+    emne = entry.get("emne", "").strip()
+    beskrivelse = entry.get("beskrivelse", "").strip()
+
+    if not navn:
+        errors.append("navn mangler")
+
+    if afdeling not in ALLOWED_AFDELINGER:
+        errors.append(f"afdeling ugyldig ({afdeling})")
+
+    if not emne:
+        errors.append("emne mangler")
+
+    if len(beskrivelse) < 10:
+        errors.append("beskrivelse for kort (<10 tegn)")
+
+    return len(errors) == 0, errors
+
+
+def main():
+    # 5 fake indsendelser (som fra en formular)
+    submissions = [
+        {
+            "navn": "Anna",
+            "afdeling": "HR",
+            "emne": "Løn",
+            "beskrivelse": "Spørgsmål om lønregulering",
+            "email": "anna@firma.dk",
+        },
+        {
+            "navn": "",
+            "afdeling": "IT",
+            "emne": "Computer",
+            "beskrivelse": "Min pc virker ikke",
+        },
+        {
+            "navn": "Mads",
+            "afdeling": "Salg",
+            "emne": "Adgang",
+            "beskrivelse": "Mangler adgang",
+        },
+        {
+            "navn": "Sara",
+            "afdeling": "Økonomi",
+            "emne": "",
+            "beskrivelse": "Budget for næste kvartal er uklart",
+        },
+        {
+            "navn": "Jonas",
+            "afdeling": "Andet",
+            "emne": "Ferie",
+            "beskrivelse": "Ferie",
+        },
+    ]
+
+    print("\n📋 Dag 39 – Datavalidering\n")
+
+    for i, entry in enumerate(submissions, start=1):
+        is_valid, errors = validate(entry)
+
+        if is_valid:
+            print(f"{i}. VALID")
+        else:
+            print(f"{i}. INVALID → {', '.join(errors)}")
+
+
+if __name__ == "__main__":
+    main()
