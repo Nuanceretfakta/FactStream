@@ -1,0 +1,134 @@
+# Day 41 – insight, not just data
+
+import csv
+from collections import defaultdict
+from pathlib import Path
+
+INPUT_CSV = "henvendelser.csv"
+
+
+def read_cases(input_path: str) -> list[dict]:
+    """Reads cases from CSV and returns a list of dicts with kategori + tid_minutter."""
+    cases = []
+
+    with open(input_path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f, skipinitialspace=True)
+
+        if reader.fieldnames is None:
+            return []
+
+        # Normalize headers (Sheets can add trailing spaces)
+        reader.fieldnames = [h.strip() for h in reader.fieldnames]
+        required = {"kategori", "tid_minutter", "dato"}
+
+        if not required.issubset(set(reader.fieldnames)):
+            raise ValueError(
+                f"CSV mangler kolonner.\nFandt: {reader.fieldnames}\nForventer: {sorted(required)}"
+            )
+
+        for row in reader:
+            row = {k.strip(): (v.strip() if isinstance(v, str) else v) for k, v in row.items()}
+
+            kategori = (row.get("kategori") or "").strip()
+            tid_txt = (row.get("tid_minutter") or "").strip()
+
+            if not kategori or not tid_txt:
+                continue
+
+            # If someone uses comma decimals (rare here), handle it gracefully
+            tid_txt = tid_txt.replace(",", ".")
+
+            try:
+                minutter = float(tid_txt)
+            except ValueError:
+                continue
+
+            cases.append({"kategori": kategori, "tid_minutter": minutter})
+
+    return cases
+
+
+def compute_metrics(cases: list[dict]) -> list[dict]:
+    """
+    Returns metrics per kategori:
+    - antal
+    - samlet_minutter
+    - gns_minutter
+    """
+    antal = defaultdict(int)
+    samlet = defaultdict(float)
+
+    for c in cases:
+        k = c["kategori"]
+        antal[k] += 1
+        samlet[k] += c["tid_minutter"]
+
+    metrics = []
+    for k in antal:
+        gns = samlet[k] / antal[k] if antal[k] else 0
+        metrics.append(
+            {
+                "kategori": k,
+                "antal": antal[k],
+                "samlet_minutter": samlet[k],
+                "gns_minutter": gns,
+            }
+        )
+
+    return metrics
+
+
+def format_report(metrics: list[dict]) -> str:
+    """
+    Creates a copy/paste friendly report text.
+    Bottlenecks are defined as highest average handling time (gns_minutter).
+    """
+    if not metrics:
+        return "Ingen data i dag"
+
+    # Sort for overview (by total time) and bottlenecks (by average time)
+    by_total = sorted(metrics, key=lambda x: x["samlet_minutter"], reverse=True)
+    by_avg = sorted(metrics, key=lambda x: x["gns_minutter"], reverse=True)
+
+    top3 = by_avg[:3]
+
+    total_cases = sum(m["antal"] for m in metrics)
+    total_hours = sum(m["samlet_minutter"] for m in metrics) / 60
+
+    lines = []
+    lines.append("📌 Dag 41 – Indsigt (klar til mail/rapport)")
+    lines.append("")
+    lines.append(f"Samlet: {total_cases} henvendelser | {total_hours:.1f} timer")
+    lines.append("")
+    lines.append("Gns. behandlingstid pr. kategori:")
+    for m in by_total:
+        lines.append(
+            f"- {m['kategori']}: {m['gns_minutter']:.1f} min i snit "
+            f"({m['antal']} sager | {m['samlet_minutter']/60:.1f} timer)"
+        )
+
+    lines.append("")
+    lines.append("🔥 Top-3 flaskehalse (højest gennemsnitstid):")
+    for i, m in enumerate(top3, start=1):
+        lines.append(
+            f"{i}. {m['kategori']} – {m['gns_minutter']:.1f} min i snit "
+            f"({m['antal']} sager)"
+        )
+
+    return "\n".join(lines)
+
+
+def main() -> None:
+    if not Path(INPUT_CSV).exists():
+        print(f"❌ Mangler inputfil: {INPUT_CSV}")
+        return
+
+    cases = read_cases(INPUT_CSV)
+    metrics = compute_metrics(cases)
+
+    report_text = format_report(metrics)
+    print("\n" + report_text + "\n")
+
+
+if __name__ == "__main__":
+    main()
