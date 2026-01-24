@@ -1,0 +1,112 @@
+# Day 42 – export-ready insight summary
+
+import csv
+from collections import defaultdict
+from pathlib import Path
+
+INPUT_CSV = "henvendelser.csv"
+SUMMARY_TXT = "daily_summary.txt"
+
+
+def read_cases(input_path: str) -> list[dict]:
+    cases = []
+    with open(input_path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f, skipinitialspace=True)
+
+        if reader.fieldnames is None:
+            return []
+
+        reader.fieldnames = [h.strip() for h in reader.fieldnames]
+        required = {"kategori", "tid_minutter", "dato"}
+
+        if not required.issubset(set(reader.fieldnames)):
+            raise ValueError(
+                f"CSV mangler kolonner.\nFandt: {reader.fieldnames}\nForventer: {sorted(required)}"
+            )
+
+        for row in reader:
+            row = {k.strip(): (v.strip() if isinstance(v, str) else v) for k, v in row.items()}
+            kategori = (row.get("kategori") or "").strip()
+            tid_txt = (row.get("tid_minutter") or "").strip().replace(",", ".")
+            if not kategori or not tid_txt:
+                continue
+
+            try:
+                minutter = float(tid_txt)
+            except ValueError:
+                continue
+
+            cases.append({"kategori": kategori, "tid_minutter": minutter})
+
+    return cases
+
+
+def compute_metrics(cases: list[dict]) -> list[dict]:
+    antal = defaultdict(int)
+    samlet = defaultdict(float)
+
+    for c in cases:
+        k = c["kategori"]
+        antal[k] += 1
+        samlet[k] += c["tid_minutter"]
+
+    metrics = []
+    for k in antal:
+        gns = samlet[k] / antal[k] if antal[k] else 0
+        metrics.append(
+            {"kategori": k, "antal": antal[k], "samlet_minutter": samlet[k], "gns_minutter": gns}
+        )
+
+    return metrics
+
+
+def build_summary_text(metrics: list[dict]) -> str:
+    if not metrics:
+        return "Ingen data i dag."
+
+    total_cases = sum(m["antal"] for m in metrics)
+    total_hours = sum(m["samlet_minutter"] for m in metrics) / 60
+
+    # Bottlenecks = highest average handling time
+    top3 = sorted(metrics, key=lambda x: x["gns_minutter"], reverse=True)[:3]
+
+    # Biggest workload = highest total time (often useful in leadership summaries)
+    top_workload = sorted(metrics, key=lambda x: x["samlet_minutter"], reverse=True)[0]
+
+    lines = []
+    lines.append(f"I dag blev {total_cases} sager behandlet (ca. {total_hours:.1f} timer samlet).")
+    lines.append(
+        f"Største tidsforbrug lå på '{top_workload['kategori']}' "
+        f"({top_workload['samlet_minutter']/60:.1f} timer fordelt på {top_workload['antal']} sager)."
+    )
+    lines.append("Top-3 flaskehalse (højest gennemsnitlig behandlingstid):")
+    for i, m in enumerate(top3, start=1):
+        lines.append(f"{i}) {m['kategori']} – {m['gns_minutter']:.1f} min i snit ({m['antal']} sager)")
+
+    return "\n".join(lines)
+
+
+def save_text(path: str, text: str) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+def main() -> None:
+    if not Path(INPUT_CSV).exists():
+        print(f"❌ Mangler inputfil: {INPUT_CSV}")
+        return
+
+    cases = read_cases(INPUT_CSV)
+    metrics = compute_metrics(cases)
+
+    summary = build_summary_text(metrics)
+
+    save_text(SUMMARY_TXT, summary)
+
+    print("\n📨 Dag 42 – Klar kommunikation (copy/paste)\n")
+    print(summary)
+    print(f"\n✅ Gemte også teksten i: {SUMMARY_TXT}\n")
+
+
+if __name__ == "__main__":
+    main()
