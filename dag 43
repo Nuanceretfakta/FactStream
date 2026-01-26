@@ -1,0 +1,77 @@
+# Day 43 – normalize chaos into usable data
+
+from typing import Dict
+
+
+STANDARD_AFDELINGER = {
+    "hr": "HR",
+    "human resources": "HR",
+    "it": "IT",
+    "tech": "IT",
+    "økonomi": "Økonomi",
+    "finance": "Økonomi",
+}
+
+STANDARD_PRIORITET = {
+    "low": "Lav",
+    "lav": "Lav",
+    "medium": "Middel",
+    "middel": "Middel",
+    "high": "Høj",
+    "høj": "Høj",
+}
+
+
+def clean_text(value: str) -> str:
+    return (value or "").strip().lower()
+
+
+def normalize_entry(raw: Dict) -> Dict:
+    """
+    Takes raw input (e.g. from webhook) and maps it to internal format.
+    """
+    navn = clean_text(raw.get("name"))
+    email = clean_text(raw.get("email"))
+
+    raw_afdeling = clean_text(raw.get("department"))
+    afdeling = STANDARD_AFDELINGER.get(raw_afdeling, "Andet")
+
+    raw_prio = clean_text(raw.get("priority"))
+    prioritet = STANDARD_PRIORITET.get(raw_prio, "Middel")
+
+    beskrivelse = (raw.get("message") or "").strip()
+
+    return {
+        "navn": navn.title(),
+        "email": email,
+        "afdeling": afdeling,
+        "prioritet": prioritet,
+        "beskrivelse": beskrivelse,
+    }
+
+
+def main():
+    # Simuleret webhook-input (rodede, inkonsistente data)
+    raw_input = {
+        "name": "  jONAS  ",
+        "email": " Jonas@Example.COM ",
+        "department": "Human Resources",
+        "priority": "HIGH ",
+        "message": "   Jeg kan ikke logge ind i systemet   ",
+    }
+
+    clean = normalize_entry(raw_input)
+
+    print("\n🔴 RAW INPUT:")
+    for k, v in raw_input.items():
+        print(f"{k}: {v}")
+
+    print("\n🟢 CLEAN INPUT (internt format):")
+    for k, v in clean.items():
+        print(f"{k}: {v}")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
