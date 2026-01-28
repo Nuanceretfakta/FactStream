@@ -1,0 +1,96 @@
+# Day 44 – decision engine (AUTO vs MANUEL)
+
+from typing import List, Dict, Tuple
+
+
+def clean_text(value: str) -> str:
+    return (value or "").strip()
+
+
+def is_unclear_description(text: str) -> bool:
+    """
+    Heuristic: unclear if too short or too generic.
+    """
+    t = clean_text(text).lower()
+    generic = {"hjælp", "help", "ved ikke", "ok", "problem", "fejl", "??", "virker ikke"}
+    return len(t) < 15 or t in generic
+
+
+def decide(entry: Dict) -> Tuple[str, str]:
+    """
+    Returns (decision, reason)
+    Rules (simple + practical):
+    - MANUEL if high priority OR unclear description OR missing email
+    - AUTO otherwise
+    """
+    prioritet = clean_text(entry.get("prioritet", "Middel")).capitalize()
+    beskrivelse = clean_text(entry.get("beskrivelse", ""))
+    email = clean_text(entry.get("email", ""))
+
+    reasons = []
+
+    if prioritet == "Høj":
+        reasons.append("høj prioritet")
+
+    if is_unclear_description(beskrivelse):
+        reasons.append("uklar beskrivelse")
+
+    if not email:
+        reasons.append("mangler email")
+
+    if reasons:
+        return "MANUEL", " + ".join(reasons)
+    return "AUTO", "standard sag (klar beskrivelse + ikke-høj prioritet)"
+
+
+def main() -> None:
+    # Input: liste af henvendelser (som fra webhook/form)
+    cases: List[Dict] = [
+        {
+            "navn": "Anna",
+            "afdeling": "HR",
+            "prioritet": "Lav",
+            "email": "anna@firma.dk",
+            "beskrivelse": "Jeg vil gerne ændre løntrækprocent – hvordan gør jeg?",
+        },
+        {
+            "navn": "Jonas",
+            "afdeling": "IT",
+            "prioritet": "Høj",
+            "email": "jonas@firma.dk",
+            "beskrivelse": "Systemet fejler når jeg logger ind med MitID, fejlkode 401.",
+        },
+        {
+            "navn": "Mads",
+            "afdeling": "Økonomi",
+            "prioritet": "Middel",
+            "email": "mads@firma.dk",
+            "beskrivelse": "Hjælp",
+        },
+        {
+            "navn": "Sara",
+            "afdeling": "IT",
+            "prioritet": "Middel",
+            "email": "",
+            "beskrivelse": "Kan ikke få adgang til delte mapper i SharePoint.",
+        },
+        {
+            "navn": "Noah",
+            "afdeling": "Andet",
+            "prioritet": "Lav",
+            "email": "noah@firma.dk",
+            "beskrivelse": "Jeg kan ikke finde den rigtige blanket til ferieanmodning i portalen.",
+        },
+    ]
+
+    print("\n🤖 Dag 44 – Beslutningsmotor (AUTO vs MANUEL)\n")
+
+    for idx, entry in enumerate(cases, start=1):
+        decision, reason = decide(entry)
+        print(f"Sag {idx} → {decision} ({reason})")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
