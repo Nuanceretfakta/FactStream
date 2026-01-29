@@ -1,0 +1,84 @@
+# Day 45 – refactoring the decision engine (vibe coding)
+
+from typing import Dict, List, Tuple
+
+
+def normalize(text: str) -> str:
+    return (text or "").strip()
+
+
+def description_is_unclear(text: str) -> bool:
+    """
+    Simple heuristic for unclear descriptions.
+    """
+    t = normalize(text).lower()
+    too_short = len(t) < 15
+    too_generic = t in {"hjælp", "help", "ved ikke", "ok", "problem", "fejl", "virker ikke"}
+    return too_short or too_generic
+
+
+def decision_and_reason(case: Dict) -> Tuple[str, str]:
+    """
+    Returns decision (AUTO/MANUEL) and a short reason.
+    Same rules as Day 44 – cleaner structure.
+    """
+    priority = normalize(case.get("prioritet", "Middel")).capitalize()
+    description = normalize(case.get("beskrivelse", ""))
+    email = normalize(case.get("email", ""))
+
+    manual_reasons = []
+
+    if priority == "Høj":
+        manual_reasons.append("høj prioritet")
+
+    if description_is_unclear(description):
+        manual_reasons.append("uklar beskrivelse")
+
+    if not email:
+        manual_reasons.append("mangler email")
+
+    if manual_reasons:
+        return "MANUEL", ", ".join(manual_reasons)
+
+    return "AUTO", "klar sag uden høj prioritet"
+
+
+def main() -> None:
+    cases: List[Dict] = [
+        {
+            "navn": "Anna",
+            "prioritet": "Lav",
+            "email": "anna@firma.dk",
+            "beskrivelse": "Jeg vil gerne ændre løntrækprocent – hvordan gør jeg?",
+        },
+        {
+            "navn": "Jonas",
+            "prioritet": "Høj",
+            "email": "jonas@firma.dk",
+            "beskrivelse": "Systemet fejler ved login med MitID (fejlkode 401).",
+        },
+        {
+            "navn": "Mads",
+            "prioritet": "Middel",
+            "email": "mads@firma.dk",
+            "beskrivelse": "Hjælp",
+        },
+        {
+            "navn": "Sara",
+            "prioritet": "Middel",
+            "email": "",
+            "beskrivelse": "Kan ikke få adgang til delte mapper i SharePoint.",
+        },
+    ]
+
+    print("\n🤖 Dag 45 – Beslutningsmotor (refaktoreret)\n")
+
+    for index, case in enumerate(cases, start=1):
+        decision, reason = decision_and_reason(case)
+        print(f"Sag {index}: {decision} — {reason}")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
