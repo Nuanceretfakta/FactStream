@@ -1,0 +1,47 @@
+# Day 46 – Python as a neutral decision engine
+
+from typing import Dict
+
+
+# Neutral forretningslogik (kan bruges af Zapier, Make, Power Automate, UI, API)
+SLA_BY_PRIORITY = {
+    "Lav": "5 arbejdsdage",
+    "Middel": "2 arbejdsdage",
+    "Høj": "Samme dag",
+}
+
+
+def normalize(text: str) -> str:
+    return (text or "").strip().capitalize()
+
+
+def calculate_sla(priority: str) -> str:
+    """
+    Core logic:
+    Maps priority to SLA.
+    Neutral and tool-agnostic.
+    """
+    prio = normalize(priority)
+    return SLA_BY_PRIORITY.get(prio, "Ukendt SLA")
+
+
+def main() -> None:
+    # Simuleret input (kunne komme fra Zapier, Make, formular, API)
+    cases = [
+        {"sag": 1, "prioritet": "lav"},
+        {"sag": 2, "prioritet": "Middel"},
+        {"sag": 3, "prioritet": "HØJ"},
+        {"sag": 4, "prioritet": "ukendt"},
+    ]
+
+    print("\n⚙️ Dag 46 – Python som neutral motor\n")
+
+    for case in cases:
+        sla = calculate_sla(case["prioritet"])
+        print(f"Sag {case['sag']} → prioritet: {case['prioritet']} → SLA: {sla}")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
