@@ -1,0 +1,74 @@
+# Day 47 – documenting tool-choice logic in code
+
+from typing import Dict, Tuple
+
+
+def normalize(text: str) -> str:
+    return (text or "").strip().lower()
+
+
+def recommend_tool(case: Dict) -> Tuple[str, str]:
+    """
+    Input:
+      - type: 'ekstern' eller 'intern'
+      - hastegrad: 'lav' / 'middel' / 'høj'
+      - kompleksitet: 'lav' / 'middel' / 'høj' (valgfri, default 'middel')
+
+    Output:
+      - tool: 'Make' / 'Zapier' / 'Microsoft'
+      - reason: kort forklaring
+    """
+    case_type = normalize(case.get("type"))
+    hastegrad = normalize(case.get("hastegrad"))
+    kompleksitet = normalize(case.get("kompleksitet", "middel"))
+
+    # 1) Microsoft (Power Automate / M365) når der er stærk intern Microsoft-kontekst
+    #    -> typisk interne processer, SharePoint, Teams, Outlook, Forms
+    if case_type == "intern":
+        return (
+            "Microsoft",
+            "Intern proces: passer naturligt til M365 (Teams/SharePoint/Outlook/Forms) og governance.",
+        )
+
+    # 2) Make når der er eksterne inputs + høj kompleksitet/orkestrering
+    #    -> webhooks, routing, flere systemer, datastrukturering
+    if case_type == "ekstern" and (kompleksitet == "høj" or hastegrad == "høj"):
+        return (
+            "Make",
+            "Ekstern sag med høj orkestrering: stærk til webhooks, avanceret routing og datatransformation.",
+        )
+
+    # 3) Zapier til hurtige, standardiserede workflows (lav/middel kompleksitet)
+    return (
+        "Zapier",
+        "Standard workflow: hurtig opsætning, stabil drift og gode integrationer til simple automatiseringer.",
+    )
+
+
+def pretty_case(case: Dict) -> str:
+    return (
+        f"type={case.get('type')} | hastegrad={case.get('hastegrad')} | "
+        f"kompleksitet={case.get('kompleksitet', 'middel')}"
+    )
+
+
+def main() -> None:
+    # Input: type af sag (ekstern/intern/hastegrad)
+    cases = [
+        {"type": "intern", "hastegrad": "middel", "kompleksitet": "middel"},
+        {"type": "ekstern", "hastegrad": "lav", "kompleksitet": "lav"},
+        {"type": "ekstern", "hastegrad": "høj", "kompleksitet": "middel"},
+        {"type": "ekstern", "hastegrad": "middel", "kompleksitet": "høj"},
+    ]
+
+    print("\n🧭 Dag 47 – Beslutningslogik i kode\n")
+
+    for i, case in enumerate(cases, start=1):
+        tool, reason = recommend_tool(case)
+        print(f"Sag {i} ({pretty_case(case)})")
+        print(f"→ Anbefaling: Brug {tool}")
+        print(f"→ Hvorfor: {reason}\n")
+
+
+if __name__ == "__main__":
+    main()
