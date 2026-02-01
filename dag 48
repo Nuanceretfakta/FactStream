@@ -1,0 +1,84 @@
+"""
+Day 48 – Decision logic as documentation
+
+This script documents how an organization chooses between
+Make, Zapier, or Microsoft automation tools.
+
+Purpose:
+- Make architecture decisions explicit and explainable
+- Ensure consistent tool choice across teams
+- Serve as shared reference logic for automation design
+
+The code is intentionally simple and readable.
+"""
+
+from typing import Dict, Tuple
+
+
+def normalize(text: str) -> str:
+    """Normalize free-text input for stable comparisons."""
+    return (text or "").strip().lower()
+
+
+def recommend_tool(case: Dict) -> Tuple[str, str]:
+    """
+    Recommends which automation tool to use based on case characteristics.
+
+    Input (case dict):
+      - type: 'ekstern' or 'intern'
+      - hastegrad: 'lav' / 'middel' / 'høj'
+      - kompleksitet: 'lav' / 'middel' / 'høj' (optional)
+
+    Output:
+      - tool name
+      - short explanation
+    """
+
+    case_type = normalize(case.get("type"))
+    hastegrad = normalize(case.get("hastegrad"))
+    kompleksitet = normalize(case.get("kompleksitet", "middel"))
+
+    # Intern logik:
+    # Interne processer bør holdes i Microsoft-universet
+    # for governance, sikkerhed og M365-integration.
+    if case_type == "intern":
+        return (
+            "Microsoft",
+            "Intern proces – passer bedst til M365 (Teams, SharePoint, Outlook).",
+        )
+
+    # Ekstern logik:
+    # Eksterne sager med høj hast eller kompleksitet kræver
+    # fleksibel routing, webhooks og datatransformation.
+    if case_type == "ekstern" and (hastegrad == "høj" or kompleksitet == "høj"):
+        return (
+            "Make",
+            "Ekstern sag med høj kompleksitet eller hast – kræver avanceret orkestrering.",
+        )
+
+    # Standardvalg:
+    # Hurtige, stabile workflows uden speciallogik.
+    return (
+        "Zapier",
+        "Standard workflow – hurtig opsætning og stabil drift.",
+    )
+
+
+def main() -> None:
+    # Eksempler på sager (kun til demonstration / dokumentation)
+    cases = [
+        {"type": "intern", "hastegrad": "middel", "kompleksitet": "middel"},
+        {"type": "ekstern", "hastegrad": "lav", "kompleksitet": "lav"},
+        {"type": "ekstern", "hastegrad": "høj", "kompleksitet": "middel"},
+    ]
+
+    print("\n📘 Dag 48 – Beslutningslogik med dokumentation\n")
+
+    for i, case in enumerate(cases, start=1):
+        tool, reason = recommend_tool(case)
+        print(f"Sag {i} → Brug {tool}")
+        print(f"Forklaring: {reason}\n")
+
+
+if __name__ == "__main__":
+    main()
