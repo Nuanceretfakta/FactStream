@@ -1,0 +1,101 @@
+"""
+Decision engine for handling incoming cases.
+
+Problem:
+Organisationer bruger for meget tid på at vurdere,
+om en sag kan håndteres automatisk eller kræver manuel behandling.
+Beslutninger bliver inkonsistente og afhænger af, hvem der læser sagen.
+
+Løsning:
+Dette script formaliserer beslutningslogikken.
+Hver sag vurderes ud fra klare regler og klassificeres som
+AUTO eller MANUEL – altid med en tydelig begrundelse.
+
+Formål:
+- Ensartede beslutninger
+- Klar dokumentation af hvorfor en sag behandles manuelt
+- Klar til brug i automation (Zapier / Make / Microsoft)
+"""
+
+from typing import Dict, List, Tuple
+
+
+def normalize(text: str) -> str:
+    """Normalize free text input for stable comparisons."""
+    return (text or "").strip()
+
+
+def description_is_unclear(text: str) -> bool:
+    """
+    Simple heuristic:
+    A description is considered unclear if it is too short
+    or overly generic.
+    """
+    t = normalize(text).lower()
+    generic = {"hjælp", "help", "ved ikke", "ok", "problem", "fejl", "virker ikke"}
+    return len(t) < 15 or t in generic
+
+
+def decide(case: Dict) -> Tuple[str, str]:
+    """
+    Core decision logic.
+
+    Returns:
+    - decision: 'AUTO' or 'MANUEL'
+    - reason: short explanation
+    """
+    priority = normalize(case.get("prioritet", "Middel")).capitalize()
+    description = normalize(case.get("beskrivelse", ""))
+    email = normalize(case.get("email", ""))
+
+    reasons = []
+
+    if priority == "Høj":
+        reasons.append("høj prioritet")
+
+    if description_is_unclear(description):
+        reasons.append("uklar beskrivelse")
+
+    if not email:
+        reasons.append("mangler email")
+
+    if reasons:
+        return "MANUEL", ", ".join(reasons)
+
+    return "AUTO", "klar sag uden høj prioritet"
+
+
+def main() -> None:
+    # Example cases (simulating form or webhook input)
+    cases: List[Dict] = [
+        {
+            "navn": "Anna",
+            "prioritet": "Lav",
+            "email": "anna@firma.dk",
+            "beskrivelse": "Jeg vil gerne ændre min løntrækprocent.",
+        },
+        {
+            "navn": "Jonas",
+            "prioritet": "Høj",
+            "email": "jonas@firma.dk",
+            "beskrivelse": "Systemet fejler ved login med MitID.",
+        },
+        {
+            "navn": "Mads",
+            "prioritet": "Middel",
+            "email": "mads@firma.dk",
+            "beskrivelse": "Hjælp",
+        },
+    ]
+
+    print("\n🧠 Decision engine – AUTO vs MANUEL\n")
+
+    for i, case in enumerate(cases, start=1):
+        decision, reason = decide(case)
+        print(f"Sag {i}: {decision} ({reason})")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
