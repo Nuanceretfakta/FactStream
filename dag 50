@@ -1,0 +1,110 @@
+"""
+Product core – logical contract (input -> output)
+
+Purpose:
+Define the stable interface for the product's decision logic.
+Other tools (Make / Zapier / Microsoft / UI / API) can send input in this format
+and always receive a predictable output format back.
+
+No advanced logic yet. Focus is structure and readability.
+"""
+
+from typing import TypedDict, Literal, Optional
+
+
+# -------------------------
+# INPUT CONTRACT
+# -------------------------
+
+class CaseInput(TypedDict, total=False):
+    """
+    The incoming case payload (e.g., from a form, webhook, or email parsing).
+
+    Required fields (in practice):
+      - type: 'intern' or 'ekstern'
+      - afdeling: e.g. 'HR', 'IT', 'Økonomi', 'Andet'
+      - prioritet: 'Lav' / 'Middel' / 'Høj'
+      - beskrivelse: free text
+    Optional fields:
+      - navn
+      - email
+      - source (where it came from)
+    """
+
+    type: Literal["intern", "ekstern"]
+    afdeling: str
+    prioritet: Literal["Lav", "Middel", "Høj"]
+    beskrivelse: str
+
+    navn: str
+    email: str
+    source: str
+
+
+# -------------------------
+# OUTPUT CONTRACT
+# -------------------------
+
+DecisionType = Literal["AUTO", "MANUEL"]
+
+
+class DecisionOutput(TypedDict):
+    """
+    The decision result produced by the product core.
+
+    Always returned:
+      - decision: 'AUTO' or 'MANUEL'
+      - reason: short human-readable explanation
+    """
+
+    decision: DecisionType
+    reason: str
+
+
+# -------------------------
+# CORE FUNCTION (v1)
+# -------------------------
+
+def decide(case: CaseInput) -> DecisionOutput:
+    """
+    Core decision function (v1).
+
+    For Day 50:
+    - No advanced rules.
+    - Just return a predictable output format.
+    - Placeholder logic that can be improved later without breaking the contract.
+    """
+
+    # Minimal placeholder behavior (so the contract is testable)
+    return {
+        "decision": "AUTO",
+        "reason": "Standard output (v1 contract) – rules not implemented yet.",
+    }
+
+
+# -------------------------
+# DEMO / SELF-TEST
+# -------------------------
+
+def main() -> None:
+    example_input: CaseInput = {
+        "type": "ekstern",
+        "afdeling": "IT",
+        "prioritet": "Middel",
+        "beskrivelse": "Kan ikke logge ind i systemet.",
+        "email": "jonas@firma.dk",
+        "source": "webform",
+    }
+
+    result = decide(example_input)
+
+    print("\n📦 Product core – input/output contract\n")
+    print("INPUT (CaseInput):")
+    print(example_input)
+    print("\nOUTPUT (DecisionOutput):")
+    print(result)
+    print()
+
+
+if __name__ == "__main__":
+    main()
