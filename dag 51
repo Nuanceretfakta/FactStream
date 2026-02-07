@@ -1,0 +1,97 @@
+"""
+Product core – logical contract (input -> output)
+
+Purpose:
+Define and execute the first decision rule in the product.
+The contract stays stable while rules can evolve.
+"""
+
+from typing import TypedDict, Literal
+
+
+# -------------------------
+# INPUT CONTRACT
+# -------------------------
+
+class CaseInput(TypedDict, total=False):
+    type: Literal["intern", "ekstern"]
+    afdeling: str
+    prioritet: Literal["Lav", "Middel", "Høj"]
+    beskrivelse: str
+    navn: str
+    email: str
+    source: str
+
+
+# -------------------------
+# OUTPUT CONTRACT
+# -------------------------
+
+DecisionType = Literal["AUTO", "MANUEL"]
+
+
+class DecisionOutput(TypedDict):
+    decision: DecisionType
+    reason: str
+
+
+# -------------------------
+# CORE FUNCTION (v2 – first rule)
+# -------------------------
+
+def decide(case: CaseInput) -> DecisionOutput:
+    """
+    First decision rule (v2):
+
+    Rule:
+    - If prioritet is 'Høj' → MANUEL
+    - Else → AUTO
+
+    This is intentionally simple.
+    """
+
+    prioritet = case.get("prioritet", "Middel")
+
+    if prioritet == "Høj":
+        return {
+            "decision": "MANUEL",
+            "reason": "Høj prioritet kræver manuel behandling.",
+        }
+
+    return {
+        "decision": "AUTO",
+        "reason": "Ikke høj prioritet – kan håndteres automatisk.",
+    }
+
+
+# -------------------------
+# DEMO / SELF-TEST
+# -------------------------
+
+def main() -> None:
+    examples = [
+        {
+            "type": "ekstern",
+            "afdeling": "IT",
+            "prioritet": "Høj",
+            "beskrivelse": "Systemet er nede.",
+        },
+        {
+            "type": "intern",
+            "afdeling": "HR",
+            "prioritet": "Lav",
+            "beskrivelse": "Spørgsmål til ferie.",
+        },
+    ]
+
+    print("\n🧠 Product core – first decision rule\n")
+
+    for i, example in enumerate(examples, start=1):
+        result = decide(example)
+        print(f"Sag {i}: {result['decision']} – {result['reason']}")
+
+    print()
+
+
+if __name__ == "__main__":
+    main()
