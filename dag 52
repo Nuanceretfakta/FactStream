@@ -1,0 +1,87 @@
+# Day 52 – Python as a system component (input -> normalized output)
+
+from typing import Dict
+
+
+# -------------------------
+# NORMALIZATION HELPERS
+# -------------------------
+
+def normalize_text(value: str) -> str:
+    return (value or "").strip().lower()
+
+
+def normalize_priority(value: str) -> str:
+    """
+    Maps free-text priority to standard values.
+    """
+    v = normalize_text(value)
+    if v in {"høj", "high"}:
+        return "Høj"
+    if v in {"middel", "medium"}:
+        return "Middel"
+    if v in {"lav", "low"}:
+        return "Lav"
+    return "Middel"  # default
+
+
+# -------------------------
+# CORE SYSTEM LOGIC
+# -------------------------
+
+def process_case(raw_case: Dict) -> Dict:
+    """
+    Takes a raw case dict, normalizes data,
+    and returns a clear, system-ready output dict.
+    """
+
+    # Normalize input
+    kategori = normalize_text(raw_case.get("kategori"))
+    prioritet = normalize_priority(raw_case.get("prioritet"))
+    beskrivelse = (raw_case.get("beskrivelse") or "").strip()
+
+    # Simple decision logic
+    if prioritet == "Høj":
+        status = "MANUEL"
+        next_action = "Send til sagsbehandler"
+    else:
+        status = "AUTO"
+        next_action = "Send standardsvar"
+
+    # Standardized output contract
+    return {
+        "status": status,
+        "kategori": kategori or "ukendt",
+        "prioritet": prioritet,
+        "next_action": next_action,
+    }
+
+
+# -------------------------
+# DEMO / SELF-TEST
+# -------------------------
+
+def main() -> None:
+    raw_cases = [
+        {
+            "kategori": " IT ",
+            "prioritet": "HIGH",
+            "beskrivelse": "Systemet er nede",
+        },
+        {
+            "kategori": "HR",
+            "prioritet": "lav",
+            "beskrivelse": "Spørgsmål til ferie",
+        },
+    ]
+
+    print("\n⚙️ Dag 52 – Python som systemkomponent\n")
+
+    for i, raw in enumerate(raw_cases, start=1):
+        output = process_case(raw)
+        print(f"Sag {i} – input: {raw}")
+        print(f"Sag {i} – output: {output}\n")
+
+
+if __name__ == "__main__":
+    main()
