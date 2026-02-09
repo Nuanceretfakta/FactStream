@@ -4,6 +4,13 @@ Dette repository indeholder et simpelt Python-baseret backend-system, der behand
 Systemet klassificerer beskeder, vurderer konfidens, håndterer fejl og beslutter, om der kan gives autosvar
 eller om en henvendelse kræver menneskelig behandling.
 
+## Arkitekturprincip
+
+Python bruges her udelukkende til forretningslogik og datatransformation.
+Orkestrering, triggere, integrationer og UI er bevidst fravalgt i dette repo
+og håndteres i eksterne værktøjer som Make, Zapier eller Microsoft-platformen.
+
+
 ## Funktionalitet
 - Regelbaseret klassificering (pris, åbningstider, booking, andet)
 - Konfidens-score og fallback-logik
