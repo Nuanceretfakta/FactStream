@@ -1,4 +1,6 @@
 # Day 52 – Python as a system component (input -> normalized output)
+# Input: rå henvendelse (dict) fra ekstern kilde / automation
+# Output: normaliseret data klar til videre workflow
 
 from typing import Dict
 
